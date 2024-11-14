@@ -24,7 +24,10 @@ export function BoardList() {
       <Table.Root interactive>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader></Table.ColumnHeader>
+            <Table.ColumnHeader>번호</Table.ColumnHeader>
+            <Table.ColumnHeader>제목</Table.ColumnHeader>
+            <Table.ColumnHeader>작성자</Table.ColumnHeader>
+            <Table.ColumnHeader>작성일시</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -32,8 +35,8 @@ export function BoardList() {
             <Table.Row onClick={() => handleRowClick(board.id)} key={board.id}>
               <Table.Cell>{board.id}</Table.Cell>
               <Table.Cell>{board.title}</Table.Cell>
-              <Table.cell>{board.writer}</Table.cell>
-              <Table.cell>{board.inserted}</Table.cell>
+              <Table.Cell>{board.writer}</Table.Cell>
+              <Table.Cell>{board.inserted}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
