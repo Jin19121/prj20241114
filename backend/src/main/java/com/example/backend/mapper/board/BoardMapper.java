@@ -32,5 +32,5 @@ public interface BoardMapper {
   @Delete("""
           DELETE FROM board
           WHERE id = #{id}""")
-  void deleteById(int id);
+  int deleteById(int id);
 }
