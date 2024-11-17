@@ -28,6 +28,13 @@ export function BoardAdd() {
         });
 
         navigate(`/view/${data.data.id}`);
+      })
+      .catch((e) => {
+        const message = e.response.data.message;
+        toaster.create({
+          description: message.text,
+          type: message.type,
+        });
       });
   };
 
