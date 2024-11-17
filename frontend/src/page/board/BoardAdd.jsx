@@ -11,8 +11,11 @@ export function BoardAdd() {
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("");
   const navigate = useNavigate();
+  const [progress, setProgress] = useState(false);
 
   const handleSaveClick = () => {
+    setProgress(true);
+
     axios
       .post("/api/board/add", {
         title,
@@ -35,6 +38,10 @@ export function BoardAdd() {
           description: message.text,
           type: message.type,
         });
+      })
+      .finally(() => {
+        setProgress(false);
+        //성공|실패 상관 없이 loading이 결국 풀리도록
       });
   };
 
@@ -55,7 +62,9 @@ export function BoardAdd() {
           <Input value={writer} onChange={(e) => setWriter(e.target.value)} />
         </Field>
         <Box>
-          <Button onClick={handleSaveClick}>저장</Button>
+          <Button loading={progress} onClick={handleSaveClick}>
+            저장
+          </Button>
         </Box>
       </Stack>
     </Box>
