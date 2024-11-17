@@ -12,25 +12,29 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class BoardService {
-    final BoardMapper mapper;
+  final BoardMapper mapper;
 
-    public boolean add(Board board) {
-        int cnt = mapper.insert(board);
+  public boolean add(Board board) {
+    int cnt = mapper.insert(board);
 
-        return cnt == 1;
-    }
+    return cnt == 1;
+  }
 
-    public List<Board> list() {
-        return mapper.selectAll();
-    }
+  public List<Board> list() {
+    return mapper.selectAll();
+  }
 
-    public Board get(int id) {
-        return mapper.selectById(id);
-    }
+  public Board get(int id) {
+    return mapper.selectById(id);
+  }
 
-    public boolean validate(Board board) {
-        boolean title = board.getTitle().trim().length() > 0;
-        boolean content = board.getContent().trim().length() > 0;
-        return title && content;
-    }
+  public boolean validate(Board board) {
+    boolean title = board.getTitle().trim().length() > 0;
+    boolean content = board.getContent().trim().length() > 0;
+    return title && content;
+  }
+
+  public void remove(int id) {
+    mapper.deleteById(id);
+  }
 }
