@@ -1,5 +1,5 @@
-import { Box, Input, Spinner, Stack, Textarea } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Box, Input, Spinner, Stack, Textarea } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Field } from "../../components/ui/field.jsx";
@@ -17,8 +17,8 @@ import {
 import { toaster } from "../../components/ui/toaster.jsx";
 
 export function BoardEdit() {
-  const [progress, setProgress] = useState(false);
   const [board, setBoard] = useState(null);
+  const [progress, setProgress] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -29,8 +29,9 @@ export function BoardEdit() {
 
   const handleSaveClick = () => {
     setProgress(true);
+
     axios
-      .put(`/api/board/update`, board)
+      .put("/api/board/update", board)
       .then((res) => res.data)
       .then((data) => {
         toaster.create({
@@ -51,6 +52,11 @@ export function BoardEdit() {
         setDialogOpen(false);
       });
   };
+
+  // board가 null일 때 (첫 렌더)
+  if (board === null) {
+    return <Spinner />;
+  }
 
   //제목이나 본문이 비어있는지 확인
   const disabled = !(
