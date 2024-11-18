@@ -116,8 +116,8 @@ export function MemberSignup() {
                 setId(e.target.value);
               }}
             />
-            <Button onClick={handleIdCheckClick} varient={"outline"}>
-              중복 확인
+            <Button onClick={handleIdCheckClick} variant={"outline"}>
+              중복확인
             </Button>
           </Group>
         </Field>
@@ -127,6 +127,8 @@ export function MemberSignup() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
+                // 이메일은 필수 입력이 아니어서
+                // 입력하지 않을 겨우 중복체크 하지 않아도됨
                 if (e.target.value.length > 0) {
                   setEmailCheck(false);
                 } else {
@@ -137,9 +139,9 @@ export function MemberSignup() {
             <Button
               disabled={emailCheckButtonDisabled}
               onClick={handleEmailCheckClick}
-              varient={"outline"}
+              variant={"outline"}
             >
-              중복 확인
+              중복확인
             </Button>
           </Group>
         </Field>
