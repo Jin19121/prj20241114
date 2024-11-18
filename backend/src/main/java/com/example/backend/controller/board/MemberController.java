@@ -19,7 +19,6 @@ public class MemberController {
   @PutMapping("update")
   public void update(@RequestBody MemberEdit member) {
     service.update(member);
-
   }
 
   @DeleteMapping("remove")

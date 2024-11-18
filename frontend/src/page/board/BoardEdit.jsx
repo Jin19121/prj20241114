@@ -53,7 +53,7 @@ export function BoardEdit() {
   };
 
   //제목이나 본문이 비어있는지 확인
-  const disable = !(
+  const disabled = !(
     board.title.trim().length > 0 && board.content.trim().length > 0
   );
 
@@ -83,7 +83,7 @@ export function BoardEdit() {
         >
           <DialogTrigger asChild>
             <Button
-              disable={disabled}
+              disabled={disabled}
               colorPalette={"cyan"}
               variant={"outline"}
             >
