@@ -3,10 +3,7 @@ package com.example.backend.controller.board;
 import com.example.backend.dto.member.Member;
 import com.example.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,6 +12,11 @@ import java.util.List;
 @RequestMapping("/api/member")
 public class MemberController {
   final MemberService service;
+
+  @DeleteMapping("remove")
+  public void remove(@RequestBody Member member) {
+    service.remove(member);
+  }
 
   @GetMapping("{id}")
   public Member getMember(@PathVariable String id) {

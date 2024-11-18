@@ -3,6 +3,17 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Box, Input, Spinner, Stack, Textarea } from "@chakra-ui/react";
 import { Field } from "../../components/ui/field.jsx";
+import { Button } from "../../components/ui/button.jsx";
+import {
+  DialogActionTrigger,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from "../../components/ui/dialog.jsx";
 
 export function MemberInfo(props) {
   const [member, setMember] = useState(null);
@@ -12,6 +23,12 @@ export function MemberInfo(props) {
     //회원 정보 얻기
     axios.get(`/api/member/${id}`).then((res) => setMember(res.data));
   }, []);
+
+  function handleDeleteClick() {
+    axios.delete(`/api/member/remove`, {
+      data: { id: id },
+    });
+  }
 
   if (!member) {
     return <Spinner />;
@@ -37,6 +54,29 @@ export function MemberInfo(props) {
             value={member.inserted}
           ></Input>
         </Field>
+        <Box>
+          <DialogRoot>
+            <DialogTrigger asChild>
+              <Button colorPalette={"red"}>탈퇴</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>탈퇴 확인</DialogTitle>
+              </DialogHeader>
+              <DialogBody>
+                <p>탈퇴 하시겠습니까?</p>
+              </DialogBody>
+              <DialogFooter>
+                <DialogActionTrigger>
+                  <Button variant={"outline"}>취소</Button>
+                </DialogActionTrigger>
+                <Button colorPalette={"red"} onClick={handleDeleteClick}>
+                  탈퇴
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </DialogRoot>
+        </Box>
       </Stack>
     </Box>
   );
