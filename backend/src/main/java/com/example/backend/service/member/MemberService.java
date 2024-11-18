@@ -15,6 +15,15 @@ import java.util.List;
 public class MemberService {
   final MemberMapper mapper;
 
+  public boolean add(Member member) {
+    int cnt = mapper.insert(member);
+    return cnt == 1;
+  }
+
+  public boolean checkId(String id) {
+    return mapper.selectById(id) != null;
+  }
+
   public List<Member> list() {
     return mapper.selectAll();
   }
@@ -50,12 +59,5 @@ public class MemberService {
     return cnt == 1;
   }
 
-  public boolean add(Member member) {
-    int cnt = mapper.insert(member);
-    return cnt == 1;
-  }
 
-  public boolean checkId(String id) {
-    return mapper.selectById(id) != null;
-  }
 }

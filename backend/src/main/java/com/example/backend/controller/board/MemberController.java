@@ -47,17 +47,18 @@ public class MemberController {
     return service.list();
   }
 
-  @GetMapping("check")
+  @GetMapping(value = "check", params = "id")
   public ResponseEntity<Map<String, Object>> checkId(@RequestParam String id) {
     if (service.checkId(id)) {
-      //이미 있으면
+      // 이미 있으면
       return ResponseEntity.ok().body(Map.of(
-              "message", Map.of("type", "warning", "text", "이미 사용 중인 아이디"),
-              "available", false));
+              "message", Map.of("type", "warning", "text", "이미 사용중인 아이디 입니다."),
+              "available", false)
+      );
     } else {
-      //없으면
+      // 없으면
       return ResponseEntity.ok().body(Map.of(
-              "message", Map.of("type", "info", "text", "사용 가능한 아이디"),
+              "message", Map.of("type", "info", "text", "사용 가능한 아이디 입니다."),
               "available", true));
     }
   }
@@ -65,11 +66,12 @@ public class MemberController {
   @PostMapping("signup")
   public ResponseEntity<Map<String, Object>> signup(@RequestBody Member member) {
     try {
+
       if (service.add(member)) {
         return ResponseEntity.ok().body(Map.of("message",
-                Map.of("type", "success", "text", "회원 가입 완료")));
+                Map.of("type", "success", "text", "회원 가입되었습니다.")));
       } else {
-        return ResponseEntity.ok().body(Map.of("message",
+        return ResponseEntity.internalServerError().body(Map.of("message",
                 Map.of("type", "error", "text", "회원 가입 중 문제가 발생하였습니다.")));
       }
     } catch (DuplicateKeyException e) {

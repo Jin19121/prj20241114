@@ -19,7 +19,8 @@ export function MemberSignup() {
     axios
       .post("/api/member/signup", { id, email, password, description })
       .then((res) => {
-        console.log("잘됨, 페이지 이동, 토으스 출력");
+        console.log("잘됨, 페이지 이동, 토스트 출력");
+
         const message = res.data.message;
         toaster.create({
           type: message.type,
@@ -28,28 +29,29 @@ export function MemberSignup() {
         navigate("/api/member/list");
       })
       .catch((e) => {
-        console.log("안됐을 때");
-        const message = res.data.message;
+        console.log("안됐을 때 해야하는 일, 토스트 출력");
+
+        const message = e.response.data.message;
         toaster.create({
           type: message.type,
           description: message.text,
         });
       })
       .finally(() => {
-        console.log("성공/실패 모두");
+        console.log("성공이든 실패든 무조건 실행");
       });
   }
 
   const handleIdCheckClick = () => {
     axios
-      .get(`/api/member/check`, {
+      .get("/api/member/check", {
         params: { id: id },
       })
       .then((res) => res.data)
       .then((data) => {
         const message = data.message;
         toaster.create({
-          type: emssage.type,
+          type: message.type,
           description: message.text,
         });
         setIdCheck(data.available);
