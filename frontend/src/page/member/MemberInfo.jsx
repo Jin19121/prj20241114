@@ -79,6 +79,7 @@ export function MemberInfo(props) {
           ></Input>
         </Field>
         <Box>
+          <Button onClick={() => navigate(`/member/edit/${id}`)}>수정</Button>
           <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
             <DialogTrigger asChild>
               <Button colorPalette={"red"}>탈퇴</Button>
