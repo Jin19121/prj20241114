@@ -24,7 +24,6 @@ export function MemberInfo() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 회원정보 얻기
     axios.get(`/api/member/${id}`).then((res) => setMember(res.data));
   }, []);
 

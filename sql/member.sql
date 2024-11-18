@@ -12,3 +12,6 @@ CREATE TABLE member
 INSERT INTO member
     (id, email, password, description)
     value ('admin', 'server', 'admin', 'server administrator');
+
+SELECT *
+FROM member;

@@ -57,7 +57,7 @@ public class MemberController {
   }
 
 
-  @GetMapping("list")
+  @GetMapping("/list")
   public List<Member> list() {
     return service.list();
   }
