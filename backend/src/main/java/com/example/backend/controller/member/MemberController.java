@@ -15,11 +15,24 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class MemberController {
+
   final MemberService service;
 
   @PutMapping("update")
-  public void update(@RequestBody MemberEdit member) {
-    service.update(member);
+  public ResponseEntity<Map<String, Object>> update(@RequestBody MemberEdit member) {
+    if (service.update(member)) {
+      //잘됨
+      return ResponseEntity.ok(Map.of("message",
+              Map.of("type", "success",
+                      "text", "회원정보를 수정하였습니다.")));
+    } else {
+      return ResponseEntity.badRequest()
+              .body(Map.of("message",
+                      Map.of("type", "warning",
+                              "text", "정확한 정보를 입력해주세요.")));
+    }
+
+
   }
 
   @DeleteMapping("remove")
@@ -33,14 +46,16 @@ public class MemberController {
       return ResponseEntity.badRequest()
               .body(Map.of("message",
                       Map.of("type", "warning",
-                              "text", "비밀번호가 일치하지 않습니다.")));
+                              "text", "정확한 정보를 입력해주세요.")));
     }
   }
 
   @GetMapping("{id}")
   public Member getMember(@PathVariable String id) {
+
     return service.get(id);
   }
+
 
   @GetMapping("list")
   public List<Member> list() {
@@ -95,4 +110,5 @@ public class MemberController {
               Map.of("type", "error", "text", "이미 존재하는 아이디입니다.")));
     }
   }
+
 }

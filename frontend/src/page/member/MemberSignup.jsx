@@ -116,7 +116,9 @@ export function MemberSignup() {
                 setId(e.target.value);
               }}
             />
-            <Button onClick={handleIdCheckClick} varient={"outline"} />
+            <Button onClick={handleIdCheckClick} varient={"outline"}>
+              중복 확인
+            </Button>
           </Group>
         </Field>
         <Field label={"이메일"}>
