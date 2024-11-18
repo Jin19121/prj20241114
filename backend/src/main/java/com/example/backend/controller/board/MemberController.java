@@ -46,4 +46,9 @@ public class MemberController {
     return service.list();
   }
 
+
+  @PostMapping("signup")
+  public void signup(@RequestBody Member member) {
+    System.out.println(member);
+  }
 }

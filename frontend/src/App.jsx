@@ -7,6 +7,7 @@ import { MemberList } from "./page/member/MemberList.jsx";
 import MemberInfo from "./page/member/MemberInfo.jsx";
 import { BoardEdit } from "./page/board/BoardEdit.jsx";
 import { MemberEdit } from "./page/member/MemberEdit.jsx";
+import { MemberSignup } from "./page/member/MemberSignup.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       { path: "add", element: <BoardAdd /> },
       { path: "view/:id", element: <BoardView /> },
       { path: "edit/:id", element: <BoardEdit /> },
+      { pateh: "member/signup", element: <MemberSignup /> },
       { path: "member/list", element: <MemberList /> },
       { path: "member/:id", element: <MemberInfo /> },
       { path: "member/:id", element: <MemberEdit /> },
