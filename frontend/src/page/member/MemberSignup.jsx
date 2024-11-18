@@ -11,6 +11,8 @@ export function MemberSignup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [description, setDescription] = useState("");
+  const [idCheck, setIdCheck] = useState(false);
+  const [passwordCheck, setPasswordCheck] = useState("");
   const navigate = useNavigate();
 
   function handleSaveClick() {
@@ -50,8 +52,17 @@ export function MemberSignup() {
           type: emssage.type,
           description: message.text,
         });
+        setIdCheck(data.available);
       });
   };
+
+  //가입 버튼 비활성화 여부
+  let disabled = true;
+  if (idCheck) {
+    if (password === passwordCheck) {
+      disabled = false;
+    }
+  }
 
   return (
     <Box>
@@ -59,7 +70,13 @@ export function MemberSignup() {
       <Stack>
         <Field label={"아이디"}>
           <Group attached w={"100%"}>
-            <Input value={id} onChange={(e) => setId(e.target.value)} />
+            <Input
+              value={id}
+              onChange={(e) => {
+                setIdCheck(false);
+                setId(e.target.value);
+              }}
+            />
             <Button onClick={handleIdCheckClick} varient={"outline"} />
           </Group>
         </Field>
@@ -72,6 +89,13 @@ export function MemberSignup() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Field>
+        <Field label={"암호 확인"}>
+          <Input
+            value={passwordCheck}
+            onChange={(e) => setPasswordCheck(e.target.value)}
+          />
+        </Field>
+
         <Field label={"자기 소개"}>
           <Input
             value={description}
@@ -79,7 +103,9 @@ export function MemberSignup() {
           />
         </Field>
         <Box>
-          <Button onClick={handleSaveClick}>가입</Button>
+          <Button disabled={disabled} onClick={handleSaveClick}>
+            가입
+          </Button>
         </Box>
       </Stack>
     </Box>
