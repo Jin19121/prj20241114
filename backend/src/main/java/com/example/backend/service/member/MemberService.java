@@ -49,4 +49,9 @@ public class MemberService {
     }
     return cnt == 1;
   }
+
+  public boolean add(Member member) {
+    int cnt = mapper.insert(member);
+    return cnt == 1;
+  }
 }
