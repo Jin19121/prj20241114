@@ -15,4 +15,6 @@ public interface MemberMapper {
           ORDER BY id
           """)
   List<Member> selectAll();
+
+  Member selectById(String id);
 }

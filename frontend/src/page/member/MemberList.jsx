@@ -2,14 +2,21 @@ import { Box, Table } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Skeleton } from "../../components/ui/skeleton.jsx";
+import { useNavigate } from "react-router-dom";
 
 export function MemberList() {
   const [memberList, setMemberList] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     //회원 목록 요청
     axios.get("/api/member/list").then((res) => setMemberList(res.data));
   }, []);
+
+  //테이블 행 클릭 시 회원 view로 이동
+  function handleRowClick(id) {
+    navigate(`/api/member/${id}`);
+  }
 
   if (!memberList || memberList.length === 0) {
     return <Skeleton />;
@@ -27,7 +34,10 @@ export function MemberList() {
         </Table.Header>
         <Table.Body>
           {memberList.map((member) => (
-            <Table.Row key={member.id}>
+            <Table.Row
+              onClick={() => handleRowClick(member.id)}
+              key={member.id}
+            >
               <Table.Cell>{member.id}</Table.Cell>
               <Table.Cell>{member.inserted}</Table.Cell>
             </Table.Row>

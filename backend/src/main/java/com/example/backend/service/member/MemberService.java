@@ -17,4 +17,8 @@ public class MemberService {
   public List<Member> list() {
     return mapper.selectAll();
   }
+
+  public Member get(String id) {
+    return mapper.selectById(id);
+  }
 }
