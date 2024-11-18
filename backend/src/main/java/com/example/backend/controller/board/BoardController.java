@@ -16,6 +16,7 @@ public class BoardController {
 
   final BoardService service;
 
+
   @DeleteMapping("delete/{id}")
   public ResponseEntity<Map<String, Object>> delete(@PathVariable int id) {
     if (service.remove(id)) {
