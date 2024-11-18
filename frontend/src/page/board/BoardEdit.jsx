@@ -52,6 +52,11 @@ export function BoardEdit() {
       });
   };
 
+  //제목이나 본문이 비어있는지 확인
+  const disable = !(
+    board.title.trim().length > 0 && board.content.trim().length > 0
+  );
+
   if (board === null) {
     return <Spinner />;
   }
@@ -77,7 +82,11 @@ export function BoardEdit() {
           onOpenChange={(e) => setDialogOpen(e.open)}
         >
           <DialogTrigger asChild>
-            <Button colorPalette={"cyan"} variant={"outline"}>
+            <Button
+              disable={disabled}
+              colorPalette={"cyan"}
+              variant={"outline"}
+            >
               저장
             </Button>
           </DialogTrigger>
