@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { Box, Input, Stack } from "@chakra-ui/react";
+import { Box, Group, Input, Stack } from "@chakra-ui/react";
 import { Field } from "../../components/ui/field.jsx";
 import { Button } from "../../components/ui/button.jsx";
 import axios from "axios";
 import { toaster } from "../../components/ui/toaster.jsx";
+import { useNavigate } from "react-router-dom";
 
 export function MemberSignup() {
   const [id, setId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [description, setDescription] = useState("");
+  const navigate = useNavigate();
 
   function handleSaveClick() {
     axios
@@ -21,6 +23,7 @@ export function MemberSignup() {
           type: message.type,
           description: message.text,
         });
+        navigate("/api/member/list");
       })
       .catch((e) => {
         console.log("안됐을 때");
@@ -35,12 +38,30 @@ export function MemberSignup() {
       });
   }
 
+  const handleIdCheckClick = () => {
+    axios
+      .get(`/api/member/check`, {
+        params: { id: id },
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        const message = data.message;
+        toaster.create({
+          type: emssage.type,
+          description: message.text,
+        });
+      });
+  };
+
   return (
     <Box>
       <h3>회원 가입</h3>
       <Stack>
         <Field label={"아이디"}>
-          <Input value={id} onChange={(e) => setId(e.target.value)} />
+          <Group attached w={"100%"}>
+            <Input value={id} onChange={(e) => setId(e.target.value)} />
+            <Button onClick={handleIdCheckClick} varient={"outline"} />
+          </Group>
         </Field>
         <Field label={"이메일"}>
           <Input value={email} onChange={(e) => setEmail(e.target.value)} />

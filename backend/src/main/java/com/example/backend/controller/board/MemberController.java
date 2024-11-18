@@ -47,6 +47,20 @@ public class MemberController {
     return service.list();
   }
 
+  @GetMapping("check")
+  public ResponseEntity<Map<String, Object>> checkId(@RequestParam String id) {
+    if (service.checkId(id)) {
+      //이미 있으면
+      return ResponseEntity.ok().body(Map.of(
+              "message", Map.of("type", "warning", "text", "이미 사용 중인 아이디"),
+              "available", false));
+    } else {
+      //없으면
+      return ResponseEntity.ok().body(Map.of(
+              "message", Map.of("type", "info", "text", "사용 가능한 아이디"),
+              "available", true));
+    }
+  }
 
   @PostMapping("signup")
   public ResponseEntity<Map<String, Object>> signup(@RequestBody Member member) {
