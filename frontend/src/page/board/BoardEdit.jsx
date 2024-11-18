@@ -1,5 +1,5 @@
 import { Box, Input, Spinner, Stack, Textarea } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Field } from "../../components/ui/field.jsx";
@@ -14,11 +14,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../components/ui/dialog.jsx";
+import { toaster } from "../../components/ui/toaster.jsx";
 
 export function BoardEdit() {
-  const { id } = useParams();
   const [progress, setProgress] = useState(false);
   const [board, setBoard] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`/api/board/view/${id}`).then((res) => setBoard(res.data));
@@ -26,9 +29,27 @@ export function BoardEdit() {
 
   const handleSaveClick = () => {
     setProgress(true);
-    axios.put(`/api/board/update`, board).finally(() => {
-      setProgress(false);
-    });
+    axios
+      .put(`/api/board/update`, board)
+      .then((res) => res.data)
+      .then((data) => {
+        toaster.create({
+          type: data.message.type,
+          description: data.message.text,
+        });
+        navigate(`/view/${board.id}`);
+      })
+      .catch((e) => {
+        const message = e.response.data.message;
+        toaster.create({
+          type: message.type,
+          description: message.text,
+        });
+      })
+      .finally(() => {
+        setProgress(false);
+        setDialogOpen(false);
+      });
   };
 
   if (board === null) {
@@ -51,7 +72,10 @@ export function BoardEdit() {
             onChange={(e) => setBoard({ ...board, content: e.target.value })}
           />
         </Field>
-        <DialogRoot>
+        <DialogRoot
+          open={dialogOpen}
+          onOpenChange={(e) => setDialogOpen(e.open)}
+        >
           <DialogTrigger asChild>
             <Button colorPalette={"cyan"} variant={"outline"}>
               저장

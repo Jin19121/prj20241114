@@ -39,5 +39,5 @@ public interface BoardMapper {
           SET title=#{title}, content=#{content}
           WHERE id=#{id}
           """)
-  void update(Board board);
+  int update(Board board);
 }

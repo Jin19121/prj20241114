@@ -18,8 +18,15 @@ public class BoardController {
 
 
   @PutMapping("update")
-  public void update(@RequestBody Board board) {
-    service.update(board);
+  public ResponseEntity<Map<String, Object>> update(@RequestBody Board board) {
+
+    if (service.update(board)) {
+      return ResponseEntity.ok().body(Map.of("message", Map.of("type", "success",
+              "text", STR."\{board.getId()}번 게시물을 수정하셨습니다.")));
+    } else {
+      return ResponseEntity.internalServerError().body(Map.of("message", Map.of("type", "success",
+              "text", STR."\{board.getId()}번 게시물이 수정되지 않았습니다.")));
+    }
   }
 
   @DeleteMapping("delete/{id}")
