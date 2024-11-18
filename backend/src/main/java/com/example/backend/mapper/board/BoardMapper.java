@@ -42,4 +42,12 @@ public interface BoardMapper {
           WHERE id=#{id}
           """)
   int update(Board board);
+
+  @Select("""
+          SELECT id, title, writer, inserted
+          FROM board
+          ORDER BY id DESC
+          LIMIT #{offset}, 10
+          """)
+  List<Board> selectPage(int offset);
 }
