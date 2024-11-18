@@ -38,9 +38,7 @@ public class MemberService {
     //기존 암호와 비교
     Member db = mapper.selectById(member.getId());
     if (db != null) {
-
       if (db.getPassword().equals(member.getPassword())) {
-
         cnt = mapper.deleteById(member.getId());
       }
     }
@@ -59,5 +57,9 @@ public class MemberService {
     return cnt == 1;
   }
 
+  public boolean checkEmail(String email) {
+    Member member = mapper.selectByEmail(email);
 
+    return member != null;
+  }
 }

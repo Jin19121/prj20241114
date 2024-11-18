@@ -8,9 +8,17 @@ import java.util.List;
 
 @Mapper
 public interface MemberMapper {
+
+  @Insert("""
+          INSERT INTO member 
+          (id, email, password, description)
+          VALUES (#{id}, #{email}, #{password}, #{description})
+          """)
+  int insert(Member member);
+
   @Select("""
           
-          SELECT id, inserted
+          SELECT id, email, inserted
           FROM member
           ORDER BY id
           """)
@@ -31,15 +39,17 @@ public interface MemberMapper {
 
   @Update("""
           UPDATE member
-          SET password = #{password},
+          SET email = #{email},
+              password = #{password},
               description = #{description}
           WHERE id = #{id}
           """)
   int update(MemberEdit member);
 
-  @Insert("""
-          INSERT INTO member (id, email, password, description)
-          VALUES (#{id}, #{email}, #{password}, #{description})
+  @Select("""
+          SELECT *
+          FROM member
+          WHERE email=#{email}
           """)
-  int insert(Member member);
+  Member selectByEmail(String email);
 }

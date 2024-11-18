@@ -8,3 +8,7 @@ CREATE TABLE member
     description VARCHAR(1000),
     inserted    DATETIME DEFAULT NOW()
 );
+
+INSERT INTO member
+    (id, email, password, description)
+    value ('admin', 'server', 'admin', 'server administrator');
