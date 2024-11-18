@@ -63,10 +63,6 @@ export function BoardEdit() {
     board.title.trim().length > 0 && board.content.trim().length > 0
   );
 
-  if (board === null) {
-    return <Spinner />;
-  }
-
   return (
     <Box>
       <h3>{id}번 게시물 수정</h3>
