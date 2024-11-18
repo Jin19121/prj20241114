@@ -3,9 +3,11 @@ package com.example.backend.controller.board;
 import com.example.backend.dto.member.Member;
 import com.example.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,8 +16,18 @@ public class MemberController {
   final MemberService service;
 
   @DeleteMapping("remove")
-  public void remove(@RequestBody Member member) {
-    service.remove(member);
+  public ResponseEntity<Map<String, Object>> remove(@RequestBody Member member) {
+    if (service.remove(member)) {
+      //잘됨
+      return ResponseEntity.ok(Map.of("message",
+              Map.of("type", "success",
+                      "text", "회원정보를 삭제하였습니다.")));
+    } else {
+      return ResponseEntity.badRequest()
+              .body(Map.of("message",
+                      Map.of("type", "warning",
+                              "text", "비밀번호가 일치하지 않습니다.")));
+    }
   }
 
   @GetMapping("{id}")
