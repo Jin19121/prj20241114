@@ -15,8 +15,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class MemberController {
-  
+
   final MemberService service;
+
+  @PostMapping("login")
+  public void login(@RequestBody Member member) {
+    String token = service.token(member);
+
+    if (token != null) {
+
+    } else {
+    }
+  }
 
   @PutMapping("update")
   public ResponseEntity<Map<String, Object>> update(@RequestBody MemberEdit member) {

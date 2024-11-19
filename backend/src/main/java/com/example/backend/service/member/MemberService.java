@@ -62,4 +62,14 @@ public class MemberService {
 
     return member != null;
   }
+
+  public String token(Member member) {
+    Member db = mapper.selectById(member.getId());
+    if (db != null) {
+      if (db.getPassword().equals(member.getPassword())) {
+        //token 만들어서 리턴
+      }
+    }
+    return null;
+  }
 }
