@@ -6,13 +6,14 @@ import { jwtDecode } from "jwt-decode";
 export const AuthenticationContext = createContext(null);
 
 function AuthenticationProvider({ children }) {
-  const [id, setId] = useState("");
+  // const [id, setId] = useState("");
+  const [userToken, setUserToken] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const decoded = jwtDecode(token);
-      setId(decoded.sub);
+      setUserToken(decoded);
     }
   }, []);
 
@@ -20,17 +21,21 @@ function AuthenticationProvider({ children }) {
   function login(token) {
     localStorage.setItem("token", token);
     const decoded = jwtDecode(token);
-    setId(decoded.sub);
+    setUserToken(decoded);
   }
 
   //logout 하는 함수
   function logout() {
     localStorage.removeItem("token");
-    setId("");
+    setUserToken({});
   }
 
+  const isAuthenticated = Date.now() < userToken.exp * 1000;
+
   return (
-    <AuthenticationContext.Provider value={{ id, login, logout }}>
+    <AuthenticationContext.Provider
+      value={{ id: userToken.sub, login, logout, isAuthenticated }}
+    >
       {children}
     </AuthenticationContext.Provider>
   );
