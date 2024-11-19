@@ -3,13 +3,36 @@ import { Field } from "../../components/ui/field.jsx";
 import { Button } from "../../components/ui/button.jsx";
 import { useState } from "react";
 import axios from "axios";
+import { toaster } from "../../components/ui/toaster.jsx";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
   function handleLoginClick() {
-    axios.post("/api/member/login", { id, password }).then().catch().finally();
+    axios
+      .post("/api/member/login", { id, password })
+      .then((res) => res.data)
+      .then((data) => {
+        //토스트
+        toaster.create({
+          type: data.message.type,
+          description: data.message.text,
+        });
+        //경로 이동
+        navigate("/");
+        //localhost에 token 저장
+        localStorage.setItem("token", data.token);
+      })
+      .catch((e) => {
+        const message = e.response.data.message;
+        //toaster
+        toaster.create({
+          type: message.type,
+          description: message.text,
+        });
+      })
+      .finally();
   }
 
   return (
@@ -26,7 +49,7 @@ export function MemberLogin() {
           />
         </Field>
         <Box>
-          <Button>로그인</Button>
+          <Button onClick={handleLoginClick}>로그인</Button>
         </Box>
       </Stack>
     </Box>
