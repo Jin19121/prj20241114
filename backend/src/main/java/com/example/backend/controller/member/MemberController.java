@@ -15,7 +15,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class MemberController {
-
+  
   final MemberService service;
 
   @PutMapping("update")

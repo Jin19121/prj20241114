@@ -95,7 +95,7 @@ export function MemberEdit() {
               </DialogFooter>
             </DialogContent>
           </DialogRoot>
-          <Button></Button>
+          <Button>삭제</Button>
         </Box>
       </Stack>
     </Box>
