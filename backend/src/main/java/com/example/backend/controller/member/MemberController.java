@@ -95,6 +95,7 @@ public class MemberController {
 
 
   @GetMapping("/list")
+  @PreAuthorize("isAuthenticated() or hasAuthority('SCOPE_admin')")
   public List<Member> list() {
     return service.list();
   }
