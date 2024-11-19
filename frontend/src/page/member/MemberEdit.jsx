@@ -31,15 +31,38 @@ export function MemberEdit() {
     });
   }, []);
 
-  function handleSaveClick() {
+  const handleEmailCheckClick = () => {
     axios
-      .put(`/api/member/update`, {
-        id: member.id,
-        password,
-        description,
-        oldPassword,
+      .get("/api/member/check", {
+        params: {
+          email,
+        },
       })
-      .then();
+      .then((res) => res.data)
+      .then((data) => {
+        const message = data.message;
+        toaster.create({
+          type: message.type,
+          description: message.text,
+        });
+
+        setEmailCheck(data.available);
+      });
+  };
+
+  let emailCheckButtonDisabled = true;
+
+  if (email.length === 0 || member.email === email) {
+    // 이메일을 안쓰거나 기존과 같으면 true
+  } else {
+    // 그렇지 않으면 false
+    emailCheckButtonDisabled = false;
+  }
+
+  // 저장버튼 활성화 여부
+  let saveButtonDisabled = false;
+  if (!emailCheck) {
+    saveButtonDisabled = true;
   }
 
   if (member === null) {
@@ -95,7 +118,6 @@ export function MemberEdit() {
               </DialogFooter>
             </DialogContent>
           </DialogRoot>
-          <Button>삭제</Button>
         </Box>
       </Stack>
     </Box>
