@@ -1,8 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { Box, Flex } from "@chakra-ui/react";
+import { jwtDecode } from "jwt-decode";
 
 export function Navbar() {
   const navigate = useNavigate();
+
+  //TODO: 삭제해야 함
+  const token = localStorage.getItem("token");
+  if (token) {
+    const decoded = jwtDecode(token);
+    name = decoded.sub;
+  }
 
   return (
     <Flex gap={3}>
@@ -19,6 +27,7 @@ export function Navbar() {
       >
         로그아웃
       </Box>
+      <Box>{name}</Box>
     </Flex>
   );
 }
