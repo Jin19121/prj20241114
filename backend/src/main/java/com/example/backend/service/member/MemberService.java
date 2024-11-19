@@ -84,7 +84,7 @@ public class MemberService {
                 .subject(member.getId())
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 7))
-                .claim("scope", "authsString")
+                .claim("scope", authsString)
                 .build();
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
       }
@@ -96,5 +96,12 @@ public class MemberService {
     Member member = mapper.selectById(id);
 
     return member.getId().equals(authentication.getName());
+  }
+
+  public boolean isAdmin(Authentication auth) {
+    return auth.getAuthorities()
+            .stream()
+            .map(a -> a.toString())
+            .anyMatch(s -> s.equals("SCOPE_admin"));
   }
 }
