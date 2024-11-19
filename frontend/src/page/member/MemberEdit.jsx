@@ -1,7 +1,7 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Input, Spinner, Stack, Textarea } from "@chakra-ui/react";
+import { Box, Group, Input, Spinner, Stack, Textarea } from "@chakra-ui/react";
 import { Field } from "../../components/ui/field.jsx";
 import { Button } from "../../components/ui/button.jsx";
 import {
@@ -14,22 +14,61 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../components/ui/dialog.jsx";
+import { toaster } from "../../components/ui/toaster.jsx";
 
 export function MemberEdit() {
   const { id } = useParams();
   const [member, setMember] = useState(null);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [description, setDescription] = useState("");
+  const [emailCheck, setEmailCheck] = useState(true);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`/api/member/${id}`).then((res) => {
       setMember(res.data);
       setPassword(res.data.password);
       setDescription(res.data.description);
+      if (res.data.email) {
+        setEmail(res.data.email);
+      }
     });
   }, []);
+
+  function handleSaveClick() {
+    axios
+      .put("/api/member/update", {
+        id: member.id,
+        email: email.length === 0 ? null : email,
+        password,
+        description,
+        oldPassword,
+      })
+      .then((res) => {
+        const message = res.data.message;
+
+        toaster.create({
+          type: message.type,
+          description: message.text,
+        });
+        navigate(`/member/${id}`);
+      })
+      .catch((e) => {
+        const message = e.response.data.message;
+
+        toaster.create({
+          type: message.type,
+          description: message.text,
+        });
+      })
+      .finally(() => {
+        setOpen(false);
+        setOldPassword("");
+      });
+  }
 
   const handleEmailCheckClick = () => {
     axios
@@ -73,8 +112,32 @@ export function MemberEdit() {
     <Box>
       <h3>회원 정보</h3>
       <Stack gap={5}>
-        <Field label={"아이디"} readOnly>
+        <Field readOnly label={"아이디"}>
           <Input defaultValue={member.id} />
+        </Field>
+        <Field label={"이메일"}>
+          <Group attached w={"100%"}>
+            <Input
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                const emptyEmail = e.target.value.length === 0;
+                const sameEmail = e.target.value === member.email;
+                if (emptyEmail || sameEmail) {
+                  setEmailCheck(true);
+                } else {
+                  setEmailCheck(false);
+                }
+              }}
+            />
+            <Button
+              variant={"outline"}
+              onClick={handleEmailCheckClick}
+              disabled={emailCheckButtonDisabled}
+            >
+              중복확인
+            </Button>
+          </Group>
         </Field>
         <Field label={"암호"}>
           <Input
@@ -91,17 +154,19 @@ export function MemberEdit() {
         <Box>
           <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
             <DialogTrigger asChild>
-              <Button colorPalette={"red"}>저장</Button>
+              <Button disabled={saveButtonDisabled} colorPalette={"blue"}>
+                저장
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>회원 정보 변경</DialogTitle>
+                <DialogTitle>회원 정보 변경 확인</DialogTitle>
               </DialogHeader>
               <DialogBody>
                 <Stack gap={5}>
                   <Field label={"기존 암호"}>
                     <Input
-                      placeholder="기존 암호를 입력해 주십시오"
+                      placeholder={"기존 암호를 입력해주세요."}
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
                     />
