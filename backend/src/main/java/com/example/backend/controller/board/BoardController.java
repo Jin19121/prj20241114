@@ -46,7 +46,8 @@ public class BoardController {
 
   @DeleteMapping("delete/{id}")
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<Map<String, Object>> delete(@PathVariable int id, Authentication authentication) {
+  public ResponseEntity<Map<String, Object>> delete(
+          @PathVariable int id, Authentication authentication) {
     if (service.hasAccess(id, authentication)) {
       if (service.remove(id)) {
         return ResponseEntity.ok()
@@ -59,7 +60,7 @@ public class BoardController {
       }
     } else {
       return ResponseEntity.status(403).body(Map.of("message", Map.of("type", "error"
-              , "text", "다른 작성자의 글은 삭제할 수 없습니다.")));//임시: 수정 요함
+              , "text", "다른 작성자의 글은 삭제할 수 없습니다.")));
     }
   }
 

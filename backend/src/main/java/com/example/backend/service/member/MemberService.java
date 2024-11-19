@@ -4,6 +4,7 @@ import com.example.backend.dto.member.Member;
 import com.example.backend.dto.member.MemberEdit;
 import com.example.backend.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -84,5 +85,11 @@ public class MemberService {
       }
     }
     return null;
+  }
+
+  public boolean hasAccess(String id, Authentication authentication) {
+    Member member = mapper.selectById(id);
+
+    return member.getId().equals(authentication.getName());
   }
 }
