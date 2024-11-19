@@ -4,10 +4,12 @@ import { Button } from "../../components/ui/button.jsx";
 import { useState } from "react";
 import axios from "axios";
 import { toaster } from "../../components/ui/toaster.jsx";
+import { useNavigate } from "react-router-dom";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   function handleLoginClick() {
     axios

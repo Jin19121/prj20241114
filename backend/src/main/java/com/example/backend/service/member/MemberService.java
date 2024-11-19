@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
   final MemberMapper mapper;
-  private final JwtEncoder jwtEncoder;
+  final JwtEncoder jwtEncoder;
 
   public boolean add(Member member) {
     int cnt = mapper.insert(member);
