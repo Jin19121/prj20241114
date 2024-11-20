@@ -5,6 +5,7 @@ export function CommentItem({ comment }) {
     <Box boarder={"1px solid black"}>
       <Flex justify={"space-between"}>
         <h3>{comment.memberId}</h3>
+        <h4>{comment.inserted}</h4>
       </Flex>
       <p>{comment.comment}</p>
     </Box>
