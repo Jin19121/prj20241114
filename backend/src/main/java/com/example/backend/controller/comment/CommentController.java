@@ -18,12 +18,13 @@ public class CommentController {
 
   final CommentService service;
 
-  @PostMapping("edit")
+  @PutMapping("edit")
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Map<String, Object>> edit(@RequestBody Comment comment) {
     if (service.update(comment)) {
-      return ResponseEntity.ok(Map.of("message",
-              Map.of("type", "success", "text", "댓글 수정")));
+      return ResponseEntity.ok().body(Map.of("message",
+              Map.of("type", "success",
+                      "text", "댓글이 수정되었습니다.")));
     } else {
       return ResponseEntity.internalServerError().body(Map.of("message",
               Map.of("type", "error",
