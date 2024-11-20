@@ -1,25 +1,43 @@
 import {
   Box,
+  DialogActionTrigger,
+  DialogBody,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogRoot,
+  DialogTitle,
   DialogTrigger,
   Flex,
   HStack,
 } from "@chakra-ui/react";
 import { Button } from "../ui/button.jsx";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthenticationContext } from "../context/AuthenticationProvider.jsx";
 
-function DeleteButton() {
+function DeleteButton({ onClick }) {
+  const [open, setOpen] = useState(false);
+
   return (
     <>
-      <DialogRoot>
+      <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
+        <DialogTrigger asChild>
+          <Button colorPalette={"red"}>삭제</Button>
+        </DialogTrigger>
         <DialogContent>
-          <DialogHeader></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>삭제 확인</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            <p>댓글을 삭제하시겠습니까?</p>
+          </DialogBody>
           <DialogFooter>
-            <DialogTrigger></DialogTrigger>
+            <DialogActionTrigger>
+              <Button variant={"outline"}>취소</Button>
+            </DialogActionTrigger>
+            <Button colorPalette={"red"} onClick={onClick}>
+              삭제
+            </Button>
           </DialogFooter>
         </DialogContent>
       </DialogRoot>
@@ -42,13 +60,9 @@ export function CommentItem({ comment, onDeleteClick }) {
       {hasAccess(comment.memberId) && (
         <Box>
           <Button colorPalette={"purple"}>수정</Button>
-          <Button
-            colorPalette={"red"}
+          <DeleteButton
             onClick={() => onDeleteClick(comment.id)}
-          >
-            삭제
-          </Button>
-          <DeleteButton />
+          ></DeleteButton>
         </Box>
       )}
     </HStack>
