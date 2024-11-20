@@ -20,7 +20,8 @@ public interface CommentMapper {
   @Select("""
           SELECT *
           FROM comment
-          WHERE board_id = #{boardId} 
-          ORDER BY id DESC""")
+          WHERE board_id=#{boardId}
+          ORDER BY id
+          """)
   List<Comment> selectByBoardId(Integer boardId);
 }

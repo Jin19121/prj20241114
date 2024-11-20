@@ -102,6 +102,7 @@ export function BoardView() {
           </Box>
         )}
       </Stack>
+      <hr />
       <CommentContainer boardId={board.id} />
     </Box>
   );

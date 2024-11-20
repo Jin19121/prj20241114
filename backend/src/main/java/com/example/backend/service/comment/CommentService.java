@@ -18,9 +18,10 @@ public class CommentService {
 
   public void add(Comment comment, Authentication auth) {
     comment.setMemberId(auth.getName());
+
     mapper.insert(comment);
   }
-
+  
   public List<Comment> list(Integer boardId) {
     return mapper.selectByBoardId(boardId);
   }

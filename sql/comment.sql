@@ -8,5 +8,7 @@ CREATE TABLE comment
     comment   VARCHAR(500) NOT NULL,
     inserted  DATETIME     NOT NULL DEFAULT NOW()
 
-)
+);
 
+SELECT *
+FROM comment;

@@ -7,8 +7,8 @@ export function CommentContainer({ boardId }) {
     <Box>
       <Stack gap={5}>
         <h3>댓글</h3>
-        <CommentInput boadId={boardId} />
-        <CommentList baordId={boardId} />
+        <CommentInput boardId={boardId} />
+        <CommentList boardId={boardId} />
       </Stack>
     </Box>
   );

@@ -7,7 +7,11 @@ export function CommentInput({ boardId }) {
   const [comment, setComment] = useState("");
 
   function handleSaveClick() {
-    axios.post(`/api/comment/add`, { boardId: boardId, comment }).then();
+    axios
+      .post(`/api/comment/add`, { boardId: boardId, comment })
+      .then()
+      .catch()
+      .finally();
   }
 
   return (

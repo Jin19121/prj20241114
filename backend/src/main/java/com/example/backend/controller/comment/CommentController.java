@@ -18,12 +18,14 @@ public class CommentController {
 
   @GetMapping("list/{boardId}")
   public List<Comment> list(@PathVariable Integer boardId) {
+
     return service.list(boardId);
   }
 
   @PostMapping("add")
   @PreAuthorize("isAuthenticated()")
   public void add(@RequestBody Comment comment, Authentication auth) {
+    System.out.println(comment);
     service.add(comment, auth);
   }
 }
