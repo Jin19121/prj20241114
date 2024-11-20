@@ -4,11 +4,15 @@ import { CommentItem } from "./CommentItem.jsx";
 
 CommentItem.propTypes = { comment: PropTypes.any };
 
-export function CommentList({ boardId, commentList }) {
+export function CommentList({ boardId, commentList, onDeleteClick }) {
   return (
     <Box>
       {commentList.map((comment) => (
-        <CommentItem comment={comment} key={comment.id} />
+        <CommentItem
+          key={comment.id}
+          comment={comment}
+          onDeleteClick={onDeleteClick}
+        />
       ))}
     </Box>
   );
