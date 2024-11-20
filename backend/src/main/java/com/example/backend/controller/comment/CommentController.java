@@ -19,7 +19,9 @@ public class CommentController {
   @DeleteMapping("remove/{id}")
   @PreAuthorize("isAuthenticated()")
   public void remove(@PathVariable Integer id, Authentication auth) {
+
     if (service.hasAccess(id, auth)) {
+
       service.remove(id);
     }
   }
@@ -33,7 +35,6 @@ public class CommentController {
   @PostMapping("add")
   @PreAuthorize("isAuthenticated()")
   public void add(@RequestBody Comment comment, Authentication auth) {
-    System.out.println(comment);
     service.add(comment, auth);
   }
 }

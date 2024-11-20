@@ -31,7 +31,7 @@ export function CommentContainer({ boardId }) {
 
   function handleDeleteClick(id) {
     setProcessing(true);
-    axios.delete(`/api/remove/${id}`).finally(() => {
+    axios.delete(`/api/comment/remove/${id}`).finally(() => {
       setProcessing(false);
     });
   }
