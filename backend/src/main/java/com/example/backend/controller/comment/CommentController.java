@@ -3,11 +3,13 @@ package com.example.backend.controller.comment;
 import com.example.backend.dto.comment.Comment;
 import com.example.backend.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/comment")
@@ -26,6 +28,7 @@ public class CommentController {
     }
   }
 
+
   @GetMapping("list/{boardId}")
   public List<Comment> list(@PathVariable Integer boardId) {
 
@@ -34,7 +37,11 @@ public class CommentController {
 
   @PostMapping("add")
   @PreAuthorize("isAuthenticated()")
-  public void add(@RequestBody Comment comment, Authentication auth) {
+  public ResponseEntity<Map<String, Object>> add(
+          @RequestBody Comment comment, Authentication auth) {
     service.add(comment, auth);
+    return ResponseEntity.ok().body(Map.of("message",
+            Map.of("type", "success",
+                    "text", "Comment added successfully")));
   }
 }

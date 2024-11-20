@@ -1,7 +1,35 @@
-import { Box, Flex, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTrigger,
+  Flex,
+  HStack,
+} from "@chakra-ui/react";
 import { Button } from "../ui/button.jsx";
+import { useContext } from "react";
+import { AuthenticationContext } from "../context/AuthenticationProvider.jsx";
+
+function DeleteButton() {
+  return (
+    <>
+      <DialogRoot>
+        <DialogContent>
+          <DialogHeader></DialogHeader>
+          <DialogFooter>
+            <DialogTrigger></DialogTrigger>
+          </DialogFooter>
+        </DialogContent>
+      </DialogRoot>
+    </>
+  );
+}
 
 export function CommentItem({ comment, onDeleteClick }) {
+  const { hasAccess } = useContext(AuthenticationContext);
+
   return (
     <HStack border={"1px solid black"} m={5}>
       <Box flex={1}>
@@ -11,12 +39,18 @@ export function CommentItem({ comment, onDeleteClick }) {
         </Flex>
         <p>{comment.comment}</p>
       </Box>
-      <Box>
-        <Button colorPalette={"purple"}>수정</Button>
-        <Button colorPalette={"red"} onClick={() => onDeleteClick(comment.id)}>
-          삭제
-        </Button>
-      </Box>
+      {hasAccess(comment.memberId) && (
+        <Box>
+          <Button colorPalette={"purple"}>수정</Button>
+          <Button
+            colorPalette={"red"}
+            onClick={() => onDeleteClick(comment.id)}
+          >
+            삭제
+          </Button>
+          <DeleteButton />
+        </Box>
+      )}
     </HStack>
   );
 }
