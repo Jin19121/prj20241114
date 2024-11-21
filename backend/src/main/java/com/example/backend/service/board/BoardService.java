@@ -4,6 +4,7 @@ import com.example.backend.dto.board.Board;
 import com.example.backend.dto.board.BoardFile;
 import com.example.backend.mapper.board.BoardMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BoardService {
   final BoardMapper mapper;
+
+  @Value("${image.src.prefix}")
+  String imageSrcPrefix;
 
   public boolean add(Board board, MultipartFile[] files, Authentication authentication) {
     board.setWriter(authentication.getName());
@@ -71,10 +75,8 @@ public class BoardService {
     Board board = mapper.selectById(id);
     List<String> fileNameList = mapper.selectFilesByBoardId(id);
     List<BoardFile> fileSrcList = fileNameList.stream()
-            .map(name -> new BoardFile(name, STR."http://172.30.1.20:8081/\{id}/\{name}/"))
+            .map(name -> new BoardFile(name, STR."\{imageSrcPrefix}/\{id}/\{name}/"))
             .toList();
-
-    //
 
     board.setFileList(fileSrcList);
     return board;
