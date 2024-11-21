@@ -55,4 +55,10 @@ public interface BoardMapper {
           SELECT COUNT(*) FROM board
           """)
   Object countAll();
+
+  @Insert("""
+          INSERT INTO board_file
+          VALUES (#{id}, #{fileName})
+          """)
+  int insertFile(Integer id, String fileName);
 }
