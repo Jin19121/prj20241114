@@ -2,7 +2,10 @@ package com.example.backend.service.member;
 
 import com.example.backend.dto.member.Member;
 import com.example.backend.dto.member.MemberEdit;
+import com.example.backend.mapper.board.BoardMapper;
+import com.example.backend.mapper.comment.CommentMapper;
 import com.example.backend.mapper.member.MemberMapper;
+import com.example.backend.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -21,6 +24,9 @@ import java.util.stream.Collectors;
 public class MemberService {
   final MemberMapper mapper;
   final JwtEncoder jwtEncoder;
+  final CommentMapper commentMapper;
+  private final BoardMapper boardMapper;
+  private final BoardService boardService;
 
   public boolean add(Member member) {
     int cnt = mapper.insert(member);
@@ -46,6 +52,18 @@ public class MemberService {
     Member db = mapper.selectById(member.getId());
     if (db != null) {
       if (db.getPassword().equals(member.getPassword())) {
+
+        //댓글 지우기
+        commentMapper.deleteByMemberId(member.getId());
+
+        //쓴 게시물 목록 얻기
+        List<Integer> boards = boardMapper.selectByWriter(member.getId());
+
+        //각 게시물 지우기
+        for (Integer boardId : boards) {
+          boardService.remove(boardId);
+        }
+
         cnt = mapper.deleteById(member.getId());
       }
     }
