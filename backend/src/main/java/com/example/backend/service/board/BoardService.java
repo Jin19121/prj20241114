@@ -16,7 +16,6 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -37,26 +36,15 @@ public class BoardService {
 
   public boolean add(Board board, MultipartFile[] files, Authentication authentication) {
     board.setWriter(authentication.getName());
-
+    System.out.println(board);
     int cnt = mapper.insert(board);
 
     if (files != null && files.length > 0) {
 
-      // 폴더 만들기
-      String directory = STR."C:/Temp/prj1114/\{board.getId()}";
-      File dir = new File(directory);
-      if (!dir.exists()) {
-        dir.mkdirs();
-      }
 
       // 파일 업로드
       for (MultipartFile file : files) {
-//        String filePath = STR."C:/Temp/prj1114/\{board.getId()}/\{file.getOriginalFilename()}";
-//        try {
-//          file.transferTo(new File(filePath));
-//        } catch (IOException e) {
-//          throw new RuntimeException(e);
-//        }
+
 
         String objectKey = STR."prj1114/\{board.getId()}/\{file.getOriginalFilename()}";
         PutObjectRequest por = PutObjectRequest.builder()
@@ -99,7 +87,7 @@ public class BoardService {
     Board board = mapper.selectById(id);
     List<String> fileNameList = mapper.selectFilesByBoardId(id);
     List<BoardFile> fileSrcList = fileNameList.stream()
-            .map(name -> new BoardFile(name, STR."\{imageSrcPrefix}/\{id}/\{name}/"))
+            .map(name -> new BoardFile(name, STR."\{imageSrcPrefix}/\{id}/\{name}"))
             .toList();
 
     board.setFileList(fileSrcList);
