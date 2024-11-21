@@ -7,7 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-
   @Insert("""
           INSERT INTO comment
           (board_id, member_id, comment)
@@ -24,22 +23,23 @@ public interface CommentMapper {
   List<Comment> selectByBoardId(Integer boardId);
 
   @Select("""
-          SELECT *
+          SELECT * 
           FROM comment
-          WHERE id=#{id}
+          WHERE id = #{id}
           """)
   Comment selectById(Integer id);
 
+
   @Delete("""
           DELETE FROM comment
-          WHERE id=#{id}
+          WHERE id = #{id}
           """)
   int deleteById(Integer id);
 
   @Update("""
           UPDATE comment
           SET comment=#{comment}
-          WHERE id=#{id}
+          WHERE id = #{id}
           """)
   int update(Comment comment);
 }

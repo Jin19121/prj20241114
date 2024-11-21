@@ -1,5 +1,8 @@
+import { Box, Flex, HStack, Textarea } from "@chakra-ui/react";
+import { Button } from "../ui/button.jsx";
+import { useContext, useState } from "react";
+import { AuthenticationContext } from "../context/AuthenticationProvider.jsx";
 import {
-  Box,
   DialogActionTrigger,
   DialogBody,
   DialogContent,
@@ -8,13 +11,7 @@ import {
   DialogRoot,
   DialogTitle,
   DialogTrigger,
-  Flex,
-  HStack,
-  Textarea,
-} from "@chakra-ui/react";
-import { Button } from "../ui/button.jsx";
-import { useContext, useState } from "react";
-import { AuthenticationContext } from "../context/AuthenticationProvider.jsx";
+} from "../ui/dialog.jsx";
 
 function DeleteButton({ onClick }) {
   const [open, setOpen] = useState(false);
@@ -54,7 +51,7 @@ function EditButton({ comment, onEditClick }) {
     <>
       <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
         <DialogTrigger asChild>
-          <Button colorPalette={"green"}>수정</Button>
+          <Button colorPalette={"purple"}>수정</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -100,12 +97,9 @@ export function CommentItem({ comment, onDeleteClick, onEditClick }) {
       </Box>
       {hasAccess(comment.memberId) && (
         <Box>
-          <EditButton colorPalette={"purple"} onEditClick={onEditClick}>
-            수정
-          </EditButton>
-          <DeleteButton
-            onClick={() => onDeleteClick(comment.id)}
-          ></DeleteButton>
+          <EditButton comment={comment} onEditClick={onEditClick} />
+
+          <DeleteButton onClick={() => onDeleteClick(comment.id)} />
         </Box>
       )}
     </HStack>

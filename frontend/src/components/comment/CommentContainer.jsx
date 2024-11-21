@@ -1,6 +1,6 @@
 import { Box, Stack } from "@chakra-ui/react";
-import { CommentList } from "./CommentList.jsx";
 import { CommentInput } from "./CommentInput.jsx";
+import { CommentList } from "./CommentList.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toaster } from "../ui/toaster.jsx";
