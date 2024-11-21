@@ -1,4 +1,4 @@
-import { Box, HStack, Table } from "@chakra-ui/react";
+import { Badge, Box, HStack, Table } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import {
   PaginationPrevTrigger,
   PaginationRoot,
 } from "../../components/ui/pagination.jsx";
+import { FaCommentDots, FaImages } from "react-icons/fa6";
 
 export function BoardList() {
   const [boardList, setBoardList] = useState([]);
@@ -67,7 +68,21 @@ export function BoardList() {
           {boardList.map((board) => (
             <Table.Row onClick={() => handleRowClick(board.id)} key={board.id}>
               <Table.Cell>{board.id}</Table.Cell>
-              <Table.Cell>{board.title}</Table.Cell>
+              <Table.Cell>
+                {board.title}
+                {board.countComment > 0 && (
+                  <Badge variant={"subtle"} colorPalette={"green"}>
+                    <FaCommentDots />
+                    {board.countComment}
+                  </Badge>
+                )}
+                {board.countFile > 0 && (
+                  <Badge variant={"subtle"} colorPalette={"gray"}>
+                    <FaImages />
+                    {board.countFile}
+                  </Badge>
+                )}
+              </Table.Cell>
               <Table.Cell>{board.writer}</Table.Cell>
               <Table.Cell>{board.inserted}</Table.Cell>
             </Table.Row>
