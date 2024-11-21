@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,11 +22,12 @@ public class BoardController {
   @PutMapping("update")
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Map<String, Object>> update(
-          @RequestBody Board board,
-          Authentication authentication) {
+          Board board,
+          Authentication authentication,
+          @RequestParam(value = "removeFiles[]", required = false) List<String> removeFiles) {
     if (service.hasAccess(board.getId(), authentication)) {
       if (service.validate(board)) {
-        if (service.update(board)) {
+        if (service.update(board, removeFiles)) {
           return ResponseEntity.ok()
                   .body(Map.of("message", Map.of("type", "success",
                           "text", STR."\{board.getId()}번 게시물이 수정되었습니다.")));
