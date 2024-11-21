@@ -18,10 +18,11 @@ public class BoardController {
 
   final BoardService service;
 
-
   @PutMapping("update")
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Map<String, Object>> update(
-          @RequestBody Board board, Authentication authentication) {
+          @RequestBody Board board,
+          Authentication authentication) {
     if (service.hasAccess(board.getId(), authentication)) {
       if (service.validate(board)) {
         if (service.update(board)) {
@@ -40,15 +41,16 @@ public class BoardController {
       }
     } else {
       return ResponseEntity.status(403)
-              .body(Map.of("message", Map.of("type", "warning",
-                      "text", "다른 작성자의 글을 수정할 수 없습니다.")));
+              .body(Map.of("message", Map.of("type", "error"
+                      , "text", "수정 권한이 없습니다.")));
     }
   }
 
   @DeleteMapping("delete/{id}")
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Map<String, Object>> delete(
-          @PathVariable int id, Authentication authentication) {
+          @PathVariable int id,
+          Authentication authentication) {
     if (service.hasAccess(id, authentication)) {
       if (service.remove(id)) {
         return ResponseEntity.ok()
@@ -60,8 +62,9 @@ public class BoardController {
                         , "text", "게시글 삭제 중 문제가 발생하였습니다.")));
       }
     } else {
-      return ResponseEntity.status(403).body(Map.of("message", Map.of("type", "error"
-              , "text", "다른 작성자의 글은 삭제할 수 없습니다.")));
+      return ResponseEntity.status(403)
+              .body(Map.of("message", Map.of("type", "error"
+                      , "text", "삭제 권한이 없습니다.")));
     }
   }
 
@@ -71,18 +74,26 @@ public class BoardController {
   }
 
   @GetMapping("list")
-  public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer page) {
-    return service.list(page);
+  public Map<String, Object> list(
+          @RequestParam(value = "page", defaultValue = "1") Integer page,
+          @RequestParam(value = "st", defaultValue = "all") String searchType,
+          @RequestParam(value = "sk", defaultValue = "") String keyword) {
+
+    System.out.println(searchType);
+    System.out.println(keyword);
+
+    return service.list(page, searchType, keyword);
   }
 
   @PostMapping("add")
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<Map<String, Object>> add(Board board,
-                                                 @RequestParam(value = "files[]", required = false) MultipartFile[] files,
-                                                 Authentication authentication) {
+  public ResponseEntity<Map<String, Object>> add(
+          Board board,
+          @RequestParam(value = "files[]", required = false) MultipartFile[] files,
+          Authentication authentication) {
 
     if (service.validate(board)) {
-      if (service.add(board, authentication, files)) {
+      if (service.add(board, files, authentication)) {
         return ResponseEntity.ok()
                 .body(Map.of("message", Map.of("type", "success",
                                 "text", STR."\{board.getId()}번 게시물이 등록되었습니다"),

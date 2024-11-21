@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,44 +19,57 @@ import java.util.Map;
 public class BoardService {
   final BoardMapper mapper;
 
-  public boolean add(Board board, Authentication authentication, MultipartFile[] files) {
+  public boolean add(Board board, MultipartFile[] files, Authentication authentication) {
     board.setWriter(authentication.getName());
 
+    int cnt = mapper.insert(board);
+
     if (files != null && files.length > 0) {
-      //folder 만들기
-      String directory = "C:/Temp/prj1114/" + board.getId() + "}";
+
+      // 폴더 만들기
+      String directory = STR."C:/Temp/prj1114/\{board.getId()}";
       File dir = new File(directory);
       if (!dir.exists()) {
         dir.mkdirs();
       }
-      //file 업로드
 
-      //TODO:local -> aws
+      // 파일 업로드
+      // TODO : local -> aws
       for (MultipartFile file : files) {
-        String filePath = "c:/Temp/prj1114/" + board.getId() + "/{file.getOriginalFilename()}";
+        String filePath = STR."C:/Temp/prj1114/\{board.getId()}/\{file.getOriginalFilename()}";
         try {
-
           file.transferTo(new File(filePath));
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
 
-        //board_file테이블에 파일명 입력
+        // board_file 테이블에 파일명 입력
         mapper.insertFile(board.getId(), file.getOriginalFilename());
       }
     }
-    int cnt = mapper.insert(board);
 
     return cnt == 1;
   }
 
-  public Map<String, Object> list(Integer page) {
-    return Map.of("list", mapper.selectPage((page - 1) * 10),
-            "count", mapper.countAll());
+  public Map<String, Object> list(Integer page, String searchType, String keyword) {
+    // SQL 의 LIMIT 키워드에서 사용되는 offset
+    Integer offset = (page - 1) * 10;
+
+    // 조회되는 게시물들
+    List<Board> list = mapper.selectPage(offset, searchType, keyword);
+
+    // 전체 게시물 수
+    Integer count = mapper.countAll(searchType, keyword);
+
+    return Map.of("list", list,
+            "count", count);
+
   }
 
   public Board get(int id) {
-    return mapper.selectById(id);
+    Board board = mapper.selectById(id);
+    board.setFileSrc(mapper.selectFilesByBoardId(id));
+    return board;
   }
 
   public boolean validate(Board board) {

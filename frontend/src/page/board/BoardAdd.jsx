@@ -11,7 +11,10 @@ export function BoardAdd() {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [progress, setProgress] = useState(false);
+
   const navigate = useNavigate();
+
+  console.log(files);
 
   const handleSaveClick = () => {
     setProgress(true);
@@ -25,6 +28,7 @@ export function BoardAdd() {
       .then((res) => res.data)
       .then((data) => {
         const message = data.message;
+
         toaster.create({
           description: message.text,
           type: message.type,
@@ -40,26 +44,26 @@ export function BoardAdd() {
         });
       })
       .finally(() => {
+        // 성공 / 실패 상관 없이 실행: loading풀려야
         setProgress(false);
-        //성공|실패 상관 없이 loading이 결국 풀리도록
       });
   };
 
   const disabled = !(title.trim().length > 0 && content.trim().length > 0);
 
-  //files의 파일명을 component 리스트로 만들기
+  // files 의 파일명을 component 리스트로 만들기
   const filesList = [];
   for (const file of files) {
     filesList.push(
       <li>
-        {file.name}({Math.floor(file.size / 1024)}kb
+        {file.name} ({Math.floor(file.size / 1024)} kb)
       </li>,
     );
   }
 
   return (
     <Box>
-      <h2>게시물 작성</h2>
+      <h3>게시물 작성</h3>
       <Stack gap={5}>
         <Field label={"제목"}>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -71,19 +75,19 @@ export function BoardAdd() {
           />
         </Field>
         <Box>
-          <Input
-            onChang={(e) => setFiles(e.target.files)}
+          <input
+            onChange={(e) => setFiles(e.target.files)}
             type={"file"}
             accept={"image/*"}
             multiple
           />
+          <Box>{filesList}</Box>
         </Box>
-        <Box>{filesList}</Box>
         <Box>
           <Button
+            disabled={disabled}
             loading={progress}
             onClick={handleSaveClick}
-            disabled={disabled}
           >
             저장
           </Button>

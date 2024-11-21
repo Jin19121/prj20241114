@@ -7,7 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface BoardMapper {
-
   @Insert("""
           INSERT INTO board
           (title, content, writer)
@@ -19,7 +18,8 @@ public interface BoardMapper {
   @Select("""
           SELECT id, title, writer, inserted
           FROM board
-          ORDER BY id DESC """)
+          ORDER BY id DESC
+          """)
   List<Board> selectAll();
 
   @Select("""
@@ -44,21 +44,52 @@ public interface BoardMapper {
   int update(Board board);
 
   @Select("""
-          SELECT id, title, writer, inserted
-          FROM board
-          ORDER BY id DESC
-          LIMIT #{offset}, 10
+          <script>
+              SELECT b.id, b.title, b.writer, b.inserted, COUNT(c.id) countComment
+              FROM board b LEFT JOIN comment c
+                           ON b.id = c.board_id
+              WHERE 
+                  <trim prefixOverrides="OR">
+                      <if test="searchType == 'all' or searchType == 'title'">
+                          title LIKE CONCAT('%', #{keyword}, '%')
+                      </if>
+                      <if test="searchType == 'all' or searchType == 'content'">
+                       OR content LIKE CONCAT('%', #{keyword}, '%')
+                      </if>
+                  </trim>
+              GROUP BY b.id
+              ORDER BY id DESC
+              LIMIT #{offset}, 10
+          </script>
           """)
-  List<Board> selectPage(int offset);
+  List<Board> selectPage(Integer offset, String searchType, String keyword);
 
   @Select("""
+          <script>
           SELECT COUNT(*) FROM board
+          WHERE 
+              <trim prefixOverrides="OR">
+                  <if test="searchType == 'all' or searchType == 'title'">
+                      title LIKE CONCAT('%', #{keyword}, '%')
+                  </if>
+                  <if test="searchType == 'all' or searchType == 'content'">
+                   OR content LIKE CONCAT('%', #{keyword}, '%')
+                  </if>
+              </trim>
+          </script>
           """)
-  Object countAll();
+  Integer countAll(String searchType, String keyword);
 
   @Insert("""
           INSERT INTO board_file
           VALUES (#{id}, #{fileName})
           """)
   int insertFile(Integer id, String fileName);
+
+  @Select("""
+          SELECT name 
+          FROM board_file
+          WHERE board_id = #{id}
+          """)
+  List<String> selectFilesByBoardId(int id);
 }
