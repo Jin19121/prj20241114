@@ -2,7 +2,7 @@ package com.example.backend.dto.member;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class Member {
@@ -10,5 +10,5 @@ public class Member {
   private String email;
   private String password;
   private String description;
-  private LocalDate inserted;
+  private LocalDateTime inserted;
 }
