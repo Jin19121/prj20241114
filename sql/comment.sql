@@ -1,5 +1,3 @@
-USE prj20241114;
-
 CREATE TABLE comment
 (
     id        INT PRIMARY KEY AUTO_INCREMENT,

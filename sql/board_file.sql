@@ -1,5 +1,3 @@
-USE prj20241114;
-
 DESC board;
 
 CREATE TABLE board_file
