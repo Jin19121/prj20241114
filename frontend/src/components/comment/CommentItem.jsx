@@ -48,13 +48,13 @@ function DeleteButton({ onClick }) {
 
 function EditButton({ comment, onEditClick }) {
   const [open, setOpen] = useState(false);
-  const [newComment, setNewComment] = useState(comment, comment);
+  const [newComment, setNewComment] = useState(comment.comment);
 
   return (
     <>
       <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
         <DialogTrigger asChild>
-          <Button colorPalette={"green"}>수정</Button>
+          <Button colorPalette={"purple"}>수정</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -71,7 +71,7 @@ function EditButton({ comment, onEditClick }) {
               <Button variant={"outline"}>취소</Button>
             </DialogActionTrigger>
             <Button
-              colorPalette={"green"}
+              colorPalette={"purple"}
               onClick={() => {
                 setOpen(false);
                 onEditClick(comment.id, newComment);
