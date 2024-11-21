@@ -29,14 +29,13 @@ public class CommentController {
                 Map.of("type", "success",
                         "text", "댓글이 수정되었습니다.")));
       } else {
+
         return ResponseEntity.internalServerError().body(Map.of("message",
                 Map.of("type", "error",
                         "text", "댓글이 수정되지 않았습니다.")));
       }
     } else {
-      return ResponseEntity.internalServerError().body(Map.of("message",
-              Map.of("type", "error",
-                      "text", "댓글이 수정 권한이 없습니다.")));
+      return ResponseEntity.status(403).build();
     }
   }
 

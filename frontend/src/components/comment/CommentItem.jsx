@@ -54,7 +54,7 @@ function EditButton({ comment, onEditClick }) {
     <>
       <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
         <DialogTrigger asChild>
-          <Button colorPalette={"purple"}>수정</Button>
+          <Button colorPalette={"green"}>수정</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -96,7 +96,7 @@ export function CommentItem({ comment, onDeleteClick, onEditClick }) {
           <h3>{comment.memberId}</h3>
           <h4>{comment.inserted}</h4>
         </Flex>
-        <p>{comment.comment}</p>
+        <Box css={{ whiteSpace: "pre" }}>{comment.comment}</Box>
       </Box>
       {hasAccess(comment.memberId) && (
         <Box>
