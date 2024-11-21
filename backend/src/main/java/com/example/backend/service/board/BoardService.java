@@ -9,6 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,9 +24,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BoardService {
   final BoardMapper mapper;
+  final S3Client s3;
 
   @Value("${image.src.prefix}")
   String imageSrcPrefix;
+
+  @Value("${bucket.name}")
+  String bucketName;
 
   public boolean add(Board board, MultipartFile[] files, Authentication authentication) {
     board.setWriter(authentication.getName());
@@ -39,11 +47,24 @@ public class BoardService {
       }
 
       // 파일 업로드
-      // TODO : local -> aws
       for (MultipartFile file : files) {
-        String filePath = STR."C:/Temp/prj1114/\{board.getId()}/\{file.getOriginalFilename()}";
+//        String filePath = STR."C:/Temp/prj1114/\{board.getId()}/\{file.getOriginalFilename()}";
+//        try {
+//          file.transferTo(new File(filePath));
+//        } catch (IOException e) {
+//          throw new RuntimeException(e);
+//        }
+
+        String objectKey = STR."prj1114/\{board.getId()}/\{file.getOriginalFilename()}";
+        PutObjectRequest por = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .acl(ObjectCannedACL.PUBLIC_READ)
+                .build();
+
+
         try {
-          file.transferTo(new File(filePath));
+          s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
