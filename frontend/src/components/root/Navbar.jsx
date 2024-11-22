@@ -29,6 +29,7 @@ export function Navbar() {
       {isAuthenticated && (
         <NavbarItem onClick={() => navigate("/add")}>작성</NavbarItem>
       )}
+      <Box mx={"auto"}></Box>
       {isAuthenticated || (
         <NavbarItem onClick={() => navigate("/member/signup")}>가입</NavbarItem>
       )}
