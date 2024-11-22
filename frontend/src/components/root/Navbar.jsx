@@ -3,6 +3,18 @@ import { Box, Flex } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AuthenticationContext } from "../context/AuthenticationProvider.jsx";
 
+function NavbarItem({ children, ...rest }) {
+  return (
+    <Box
+      css={{ paddingX: "10px", paddingY: "10px" }}
+      _hover={{ bgColor: "blue.100", cursor: "pointer" }}
+      {...rest}
+    >
+      {children}
+    </Box>
+  );
+}
+
 export function Navbar() {
   const navigate = useNavigate();
 
@@ -13,32 +25,34 @@ export function Navbar() {
 
   return (
     <Flex gap={3}>
-      <Box
-        css={{ paddingX: "10px", paddingY: "10px" }}
-        _hover={{ bgColor: "blue.100", cursor: "pointer" }}
-        onClick={() => navigate("/")}
-      >
-        HOME
-      </Box>
-      {isAuthenticated && <Box onClick={() => navigate("/add")}>작성</Box>}
-      {isAuthenticated || (
-        <Box onClick={() => navigate("/member/signup")}>가입</Box>
+      <NavbarItem onClick={() => navigate("/")}>HOME</NavbarItem>
+      {isAuthenticated && (
+        <NavbarItem onClick={() => navigate("/add")}>작성</NavbarItem>
       )}
-      {isAdmin && <Box onClick={() => navigate("/member/list")}>회원목록</Box>}
       {isAuthenticated || (
-        <Box onClick={() => navigate("/member/login")}>로그인</Box>
+        <NavbarItem onClick={() => navigate("/member/signup")}>가입</NavbarItem>
+      )}
+      {isAdmin && (
+        <NavbarItem onClick={() => navigate("/member/list")}>
+          회원목록
+        </NavbarItem>
+      )}
+      {isAuthenticated || (
+        <NavbarItem onClick={() => navigate("/member/login")}>
+          로그인
+        </NavbarItem>
       )}
       {isAuthenticated && (
-        <Box
+        <NavbarItem
           onClick={() => {
             logout();
             navigate("/member/login");
           }}
         >
           로그아웃
-        </Box>
+        </NavbarItem>
       )}
-      <Box onClick={() => navigate(`/member/${id}`)}>{id}</Box>
+      <NavbarItem onClick={() => navigate(`/member/${id}`)}>{id}</NavbarItem>
     </Flex>
   );
 }
