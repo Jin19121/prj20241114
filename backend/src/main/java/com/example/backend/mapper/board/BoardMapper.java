@@ -128,4 +128,11 @@ public interface BoardMapper {
           VALUES (#{id}, #{name})
           """)
   int insertLike(Integer id, String name);
+
+  @Select("""
+          SELECT COUNT(*)
+          FROM board_like
+          WHERE board_id = #{id}
+          """)
+  int countLike(Integer id);
 }

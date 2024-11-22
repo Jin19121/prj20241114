@@ -172,13 +172,20 @@ public class BoardService {
     return board.getWriter().equals(authentication.getName());
   }
 
-  public void like(Board board, Authentication auth) {
-    //이미 좋아요면 삭제 : 삭제하면 1 => 좋아요하지 않은 상태가 됨
+  public Map<String, Object> like(Board board, Authentication auth) {
+    //이미 좋아요면 삭제 : 삭제하면 1
     int cnt = mapper.deleteLikeByBoardIdAndMemberId(board.getId(), auth.getName());
 
     //아니면 삽입
-    if (cnt == 0) {
+    if (cnt == 0) { // 0: 삭제할 데이터 없음
       mapper.insertLike(board.getId(), auth.getName());
     }
+
+    //좋아요 개수 조회
+    int countLike = mapper.countLike(board.getId());
+
+    Map<String, Object> result = Map.of("like", (cnt == 0), "count", countLike);
+
+    return result;
   }
 }
