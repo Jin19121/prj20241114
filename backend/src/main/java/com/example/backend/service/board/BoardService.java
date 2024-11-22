@@ -125,19 +125,21 @@ public class BoardService {
   }
 
   public boolean update(Board board, List<String> removeFiles) {
-    //파일 지우기
-    for (String file : removeFiles) {
-      String key = STR."prj1114\{board.getId()}/\{file}";
-      DeleteObjectRequest dor = DeleteObjectRequest.builder()
-              .bucket(bucketName)
-              .key(key)
-              .build();
+    if (removeFiles != null) {
+      //파일 지우기
+      for (String file : removeFiles) {
+        String key = STR."prj1114\{board.getId()}/\{file}";
+        DeleteObjectRequest dor = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
 
-      //s3파일 지우기
-      s3.deleteObject(dor);
+        //s3파일 지우기
+        s3.deleteObject(dor);
 
-      //db파일 지우기
-      mapper.deleteFileByBoardIdAndName(board.getId(), file);
+        //db파일 지우기
+        mapper.deleteFileByBoardIdAndName(board.getId(), file);
+      }
     }
 
     int cnt = mapper.update(board);
