@@ -1,13 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AuthenticationContext } from "../context/AuthenticationProvider.jsx";
+import { HiOutlinePencilSquare, HiOutlineUserPlus } from "react-icons/hi2";
+import { PiAddressBookTabsThin } from "react-icons/pi";
+import { CiLogin, CiLogout, CiUser } from "react-icons/ci";
 
 function NavbarItem({ children, ...rest }) {
   return (
     <Box
-      css={{ paddingX: "10px", paddingY: "10px" }}
-      _hover={{ bgColor: "blue.100", cursor: "pointer" }}
+      css={{
+        paddingX: "15px",
+        paddingY: "10px",
+      }}
+      _hover={{
+        bgColor: "blue.100",
+        cursor: "pointer",
+      }}
       {...rest}
     >
       {children}
@@ -27,20 +36,36 @@ export function Navbar() {
     <Flex gap={3}>
       <NavbarItem onClick={() => navigate("/")}>HOME</NavbarItem>
       {isAuthenticated && (
-        <NavbarItem onClick={() => navigate("/add")}>작성</NavbarItem>
+        <NavbarItem onClick={() => navigate("/add")}>
+          <Icon hideFrom={"md"}>
+            <HiOutlinePencilSquare />
+          </Icon>
+          <Text hideBelow={"md"}>작성</Text>
+        </NavbarItem>
       )}
       <Box mx={"auto"}></Box>
       {isAuthenticated || (
-        <NavbarItem onClick={() => navigate("/member/signup")}>가입</NavbarItem>
+        <NavbarItem onClick={() => navigate("/member/signup")}>
+          <Icon hideFrom={"md"}>
+            <HiOutlineUserPlus />
+          </Icon>
+          <Text hideBelow={"md"}>가입</Text>
+        </NavbarItem>
       )}
       {isAdmin && (
         <NavbarItem onClick={() => navigate("/member/list")}>
-          회원목록
+          <Icon hideFrom={"md"}>
+            <PiAddressBookTabsThin />
+          </Icon>
+          <Text hideBelow={"md"}>회원목록</Text>
         </NavbarItem>
       )}
       {isAuthenticated || (
         <NavbarItem onClick={() => navigate("/member/login")}>
-          로그인
+          <Icon hideFrom={"md"}>
+            <CiLogin />
+          </Icon>
+          <Text hideBelow={"md"}>로그인</Text>
         </NavbarItem>
       )}
       {isAuthenticated && (
@@ -50,10 +75,19 @@ export function Navbar() {
             navigate("/member/login");
           }}
         >
-          로그아웃
+          <Icon hideFrom={"md"}>
+            <CiLogout />
+          </Icon>
+          <Text hideBelow={"md"}>로그아웃</Text>
         </NavbarItem>
       )}
-      <NavbarItem onClick={() => navigate(`/member/${id}`)}>{id}</NavbarItem>
+      <NavbarItem onClick={() => navigate(`/member/${id}`)}>
+        {" "}
+        <Icon hideFrom={"md"}>
+          <CiUser />
+        </Icon>
+        <Text hideBelow={"md"}>{id}</Text>
+      </NavbarItem>
     </Flex>
   );
 }
