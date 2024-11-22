@@ -1,4 +1,4 @@
-import { Badge, Box, Heading, HStack, Table } from "@chakra-ui/react";
+import { Badge, Box, Center, Heading, HStack, Table } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -9,7 +9,8 @@ import {
   PaginationRoot,
 } from "../../components/ui/pagination.jsx";
 import { FaCommentDots, FaImages } from "react-icons/fa6";
-import { GoHeartFill } from "react-icons/go";
+import { GoHash, GoHeartFill, GoPersonFill } from "react-icons/go";
+import { IoCalendar } from "react-icons/io5";
 
 export function BoardList() {
   const [boardList, setBoardList] = useState([]);
@@ -54,68 +55,78 @@ export function BoardList() {
   }
 
   return (
-    <Box>
-      <Heading size={{ base: "xl", md: "2xl" }}>게시물 목록</Heading>
+    <Center>
+      <Box>
+        <Heading size={{ base: "xl", md: "2xl" }} mb={7}>
+          게시물 목록
+        </Heading>
 
-      {boardList.length > 0 ? (
-        <Table.Root interactive>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>번호</Table.ColumnHeader>
-              <Table.ColumnHeader>제목</Table.ColumnHeader>
-              <Table.ColumnHeader>
-                <GoHeartFill />
-              </Table.ColumnHeader>
-              <Table.ColumnHeader>작성자</Table.ColumnHeader>
-              <Table.ColumnHeader hideBelow={"md"}>작성일시</Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {boardList.map((board) => (
-              <Table.Row
-                onClick={() => handleRowClick(board.id)}
-                key={board.id}
-              >
-                <Table.Cell>{board.id}</Table.Cell>
-                <Table.Cell>
-                  {board.title}
-                  {board.countComment > 0 && (
-                    <Badge variant={"subtle"} colorPalette={"green"}>
-                      <FaCommentDots />
-                      {board.countComment}
-                    </Badge>
-                  )}
-                  {board.countFile > 0 && (
-                    <Badge variant={"subtle"} colorPalette={"gray"}>
-                      <FaImages />
-                      {board.countFile}
-                    </Badge>
-                  )}
-                </Table.Cell>
-                <Table.Cell>
-                  {board.countLike > 0 ? board.countLike : ""}
-                </Table.Cell>
-                <Table.Cell>{board.writer}</Table.Cell>
-                <Table.Cell hideBelow={"md"}>{board.inserted}</Table.Cell>
+        {boardList.length > 0 ? (
+          <Table.Root interactive>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader>
+                  <GoHash />
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>제목</Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  <GoHeartFill />
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  <GoPersonFill />
+                </Table.ColumnHeader>
+                <Table.ColumnHeader hideBelow={"md"}>
+                  <IoCalendar />
+                </Table.ColumnHeader>
               </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
-      ) : (
-        <p>조회된 결과가 없습니다.</p>
-      )}
-      <PaginationRoot
-        onPageChange={handlePageChange}
-        count={count}
-        pagesize={10}
-        page={page}
-      >
-        <HStack>
-          <PaginationPrevTrigger />
-          <PaginationItems />
-          <PaginationNextTrigger />
-        </HStack>
-      </PaginationRoot>
-    </Box>
+            </Table.Header>
+            <Table.Body>
+              {boardList.map((board) => (
+                <Table.Row
+                  onClick={() => handleRowClick(board.id)}
+                  key={board.id}
+                >
+                  <Table.Cell>{board.id}</Table.Cell>
+                  <Table.Cell>
+                    {board.title}
+                    {board.countComment > 0 && (
+                      <Badge variant={"subtle"} colorPalette={"green"}>
+                        <FaCommentDots />
+                        {board.countComment}
+                      </Badge>
+                    )}
+                    {board.countFile > 0 && (
+                      <Badge variant={"subtle"} colorPalette={"gray"}>
+                        <FaImages />
+                        {board.countFile}
+                      </Badge>
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {board.countLike > 0 ? board.countLike : ""}
+                  </Table.Cell>
+                  <Table.Cell>{board.writer}</Table.Cell>
+                  <Table.Cell hideBelow={"md"}>{board.inserted}</Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        ) : (
+          <p>조회된 결과가 없습니다.</p>
+        )}
+        <PaginationRoot
+          onPageChange={handlePageChange}
+          count={count}
+          pagesize={10}
+          page={page}
+        >
+          <HStack>
+            <PaginationPrevTrigger />
+            <PaginationItems />
+            <PaginationNextTrigger />
+          </HStack>
+        </PaginationRoot>
+      </Box>
+    </Center>
   );
 }
