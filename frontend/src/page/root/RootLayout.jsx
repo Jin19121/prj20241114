@@ -5,7 +5,7 @@ import { Navbar } from "../../components/root/Navbar.jsx";
 
 export function RootLayout() {
   return (
-    <Stack>
+    <Stack mx={{ md: 20, lg: 40 }}>
       <Box>
         <Navbar />
       </Box>
