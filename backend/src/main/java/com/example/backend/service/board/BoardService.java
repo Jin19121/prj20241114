@@ -120,6 +120,9 @@ public class BoardService {
     //댓글 지우기
     commentMapper.deleteByBoardId(id);
 
+    //좋아요 지우기
+    mapper.deleteLikeByBoardId(id);
+
     int cnt = mapper.deleteById(id);
     return cnt == 1;
   }
@@ -186,6 +189,19 @@ public class BoardService {
 
     Map<String, Object> result = Map.of("like", (cnt == 0), "count", countLike);
 
+    return result;
+  }
+
+  public Map<String, Object> getLike(int id, Authentication auth) {
+    boolean like = false;
+    if (auth != null) {
+      Map<String, Object> row = mapper.selectLikeByBoardIdAndMemberId(id, auth.getName());
+      if (row != null) {
+        like = true;
+      }
+    }
+    int countLike = mapper.countLike(id);
+    Map<String, Object> result = Map.of("like", like, "count", countLike);
     return result;
   }
 }
