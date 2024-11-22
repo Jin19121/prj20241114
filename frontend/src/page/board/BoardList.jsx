@@ -84,18 +84,18 @@ export function BoardList() {
         <Table.Root interactive>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>
+              <Table.ColumnHeader fontWeight={"bold"} color={"purple"}>
                 <GoHash />
               </Table.ColumnHeader>
-              <Table.ColumnHeader>제목</Table.ColumnHeader>
+              <Table.ColumnHeader fontWeight={"bold"}>제목</Table.ColumnHeader>
               <Table.ColumnHeader>
-                <GoHeartFill />
+                <GoHeartFill color={"red"} />
               </Table.ColumnHeader>
               <Table.ColumnHeader>
-                <GoPersonFill />
+                <GoPersonFill color={"blue"} />
               </Table.ColumnHeader>
               <Table.ColumnHeader hideBelow={"md"}>
-                <IoCalendar />
+                <IoCalendar color="green" />
               </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>

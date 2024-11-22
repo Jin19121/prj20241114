@@ -16,6 +16,7 @@ function NavbarItem({ children, ...rest }) {
       _hover={{
         bgColor: "blue.100",
         cursor: "pointer",
+        fontWeight: "bold",
       }}
       {...rest}
     >
