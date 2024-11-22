@@ -13,7 +13,13 @@ export function Navbar() {
 
   return (
     <Flex gap={3}>
-      <Box onClick={() => navigate("/")}>HOME</Box>
+      <Box
+        css={{ paddingX: "10px", paddingY: "10px" }}
+        _hover={{ bgColor: "blue.100", cursor: "pointer" }}
+        onClick={() => navigate("/")}
+      >
+        HOME
+      </Box>
       {isAuthenticated && <Box onClick={() => navigate("/add")}>작성</Box>}
       {isAuthenticated || (
         <Box onClick={() => navigate("/member/signup")}>가입</Box>
