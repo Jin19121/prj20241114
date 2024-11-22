@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Box, Group, Input, Stack } from "@chakra-ui/react";
+import { Box, Group, Input, Stack, Textarea } from "@chakra-ui/react";
 import { Field } from "../../components/ui/field.jsx";
 import { Button } from "../../components/ui/button.jsx";
 import axios from "axios";
 import { toaster } from "../../components/ui/toaster.jsx";
 import { useNavigate } from "react-router-dom";
+import MyHeading from "../../components/root/MyHeading.jsx";
 
 export function MemberSignup() {
   const [id, setId] = useState("");
@@ -104,8 +105,8 @@ export function MemberSignup() {
   }
 
   return (
-    <Box>
-      <h3>회원 가입</h3>
+    <Box mx={"auto"} w={{ md: "500px" }}>
+      <MyHeading>회원 가입</MyHeading>
       <Stack>
         <Field label={"아이디"}>
           <Group attached w={"100%"}>
@@ -159,7 +160,8 @@ export function MemberSignup() {
         </Field>
 
         <Field label={"자기 소개"}>
-          <Input
+          <Textarea
+            h={125}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />

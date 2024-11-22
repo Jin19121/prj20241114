@@ -3,7 +3,9 @@ import axios from "axios";
 import {
   Box,
   Card,
+  FormatNumber,
   HStack,
+  Icon,
   Input,
   Stack,
   Text,
@@ -14,6 +16,7 @@ import { Button } from "../../components/ui/button.jsx";
 import { useNavigate } from "react-router-dom";
 import { toaster } from "../../components/ui/toaster.jsx";
 import MyHeading from "../../components/root/MyHeading.jsx";
+import { CiFileOn } from "react-icons/ci";
 
 export function BoardAdd() {
   const [title, setTitle] = useState("");
@@ -71,7 +74,7 @@ export function BoardAdd() {
       invalidOneFileSize = true;
     }
     filesList.push(
-      <Card.Root size={"md"}>
+      <Card.Root size={"md"} my={1}>
         <Card.Body>
           <HStack>
             <Text
@@ -80,7 +83,17 @@ export function BoardAdd() {
               me={"auto"}
               truncate
             >
+              <Icon>
+                <CiFileOn />
+              </Icon>
               {file.name}
+            </Text>
+            <Text>
+              <FormatNumber
+                value={file.size}
+                notation={"compact"}
+                compactDisplay="short"
+              ></FormatNumber>
             </Text>
           </HStack>
         </Card.Body>

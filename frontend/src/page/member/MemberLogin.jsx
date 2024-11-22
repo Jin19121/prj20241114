@@ -6,6 +6,7 @@ import axios from "axios";
 import { toaster } from "../../components/ui/toaster.jsx";
 import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../components/context/AuthenticationProvider.jsx";
+import MyHeading from "../../components/root/MyHeading.jsx";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
@@ -41,9 +42,9 @@ export function MemberLogin() {
   }
 
   return (
-    <Box>
-      <h3>로그인</h3>
-      <Stack>
+    <Box mx={"auto"} w={{ md: "500px" }}>
+      <MyHeading>로그인</MyHeading>
+      <Stack gap={5}>
         <Field labe={"아이디"}>
           <Input value={id} onChange={(e) => setId(e.target.value)} />
         </Field>

@@ -29,6 +29,7 @@ import { AuthenticationContext } from "../../components/context/AuthenticationPr
 import { CommentContainer } from "../../components/comment/CommentContainer.jsx";
 import { GoHeart, GoHeartFill } from "react-icons/go";
 import { ToggleTip } from "../../components/ui/toggle-tip.jsx";
+import MyHeading from "../../components/root/MyHeading.jsx";
 
 function ImageFileView({ files }) {
   return (
@@ -38,7 +39,7 @@ function ImageFileView({ files }) {
           key={file.name}
           src={file.src}
           border={"1px solid black"}
-          m={3}
+          my={3}
         />
       ))}
     </Box>
@@ -105,9 +106,9 @@ export function BoardView() {
   };
 
   return (
-    <Box>
+    <Box mx={"auto"} w={{ md: "500px" }}>
       <Flex>
-        <Heading me={"auto"}>{id} 번 게시물</Heading>
+        <MyHeading me={"auto"}>{id} 번 게시물</MyHeading>
         <HStack>
           <Box onClick={handleLikeClick}>
             <ToggleTip open={likeTooltipOpen} content={"로그인"}>
@@ -122,12 +123,13 @@ export function BoardView() {
           </Box>
         </HStack>
       </Flex>
+
       <Stack gap={5}>
         <Field label="제목" readOnly>
           <Input value={board.title} />
         </Field>
         <Field label="본문" readOnly>
-          <Textarea value={board.content} />
+          <Textarea h={250} value={board.content} />
         </Field>
         <ImageFileView files={board.fileList} />
         <Field label="작성자" readOnly>
@@ -137,7 +139,14 @@ export function BoardView() {
           <Input value={board.inserted} type={"datetime-local"} />
         </Field>
         {hasAccess(board.writer) && (
-          <Box>
+          <HStack>
+            <Button
+              colorPalette={"blue"}
+              variant={"outline"}
+              onClick={() => navigate(`/edit/${board.id}`)}
+            >
+              수정
+            </Button>
             <DialogRoot>
               <DialogTrigger asChild>
                 <Button colorPalette={"red"} variant={"outline"}>
@@ -161,13 +170,7 @@ export function BoardView() {
                 </DialogFooter>
               </DialogContent>
             </DialogRoot>
-            <Button
-              colorPalette={"cyan"}
-              onClick={() => navigate(`/edit/${board.id}`)}
-            >
-              수정
-            </Button>
-          </Box>
+          </HStack>
         )}
       </Stack>
       <hr />

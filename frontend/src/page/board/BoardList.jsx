@@ -102,7 +102,11 @@ export function BoardList() {
           <Table.Body>
             {boardList.map((board) => (
               <Table.Row
-                _hover={{ cursor: "pointer" }}
+                _hover={{
+                  cursor: "pointer",
+                  colorPalette: "blue",
+                  variant: "blue",
+                }}
                 onClick={() => handleRowClick(board.id)}
                 key={board.id}
               >
@@ -152,7 +156,11 @@ export function BoardList() {
               setSearch({ ...search, keyword: e.target.value.trim() })
             }
           />
-          <Button onClick={handleSearchClick}>
+          <Button
+            colorPalette={"blue"}
+            variant={"subtle"}
+            onClick={handleSearchClick}
+          >
             <CiSearch />
           </Button>
         </HStack>

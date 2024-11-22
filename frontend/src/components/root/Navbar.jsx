@@ -10,8 +10,8 @@ function NavbarItem({ children, ...rest }) {
   return (
     <Box
       css={{
-        paddingX: "15px",
-        paddingY: "10px",
+        paddingX: "20px",
+        paddingY: "15px",
       }}
       _hover={{
         bgColor: "blue.100",
@@ -33,7 +33,7 @@ export function Navbar() {
   );
 
   return (
-    <Flex gap={3} mb={5}>
+    <Flex gap={3}>
       <NavbarItem onClick={() => navigate("/")}>HOME</NavbarItem>
       {isAuthenticated && (
         <NavbarItem onClick={() => navigate("/add")}>

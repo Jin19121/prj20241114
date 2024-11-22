@@ -1,4 +1,4 @@
-import { Box, Input, Spinner, Stack, Textarea } from "@chakra-ui/react";
+import { Box, HStack, Input, Spinner, Stack, Textarea } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -16,6 +16,7 @@ import {
 } from "../../components/ui/dialog.jsx";
 import { toaster } from "../../components/ui/toaster.jsx";
 import { AuthenticationContext } from "../../components/context/AuthenticationProvider.jsx";
+import MyHeading from "../../components/root/MyHeading.jsx";
 
 export function MemberInfo() {
   const [member, setMember] = useState(null);
@@ -63,8 +64,8 @@ export function MemberInfo() {
   }
 
   return (
-    <Box>
-      <h3>회원 정보</h3>
+    <Box mx={"auto"} w={{ md: "500px" }}>
+      <MyHeading>회원 정보</MyHeading>
       <Stack gap={5}>
         <Field label={"아이디"}>
           <Input readOnly value={member.id} />
@@ -76,17 +77,25 @@ export function MemberInfo() {
           <Input readOnly value={member.password} />
         </Field>
         <Field label={"자기소개"}>
-          <Textarea readOnly value={member.description} />
+          <Textarea h={125} readOnly value={member.description} />
         </Field>
         <Field label={"가입일시"}>
           <Input type={"datetime-local"} readOnly value={member.inserted} />
         </Field>
         {hasAccess(id) && (
-          <Box>
-            <Button onClick={() => navigate(`/member/edit/${id}`)}>수정</Button>
+          <HStack>
+            <Button
+              onClick={() => navigate(`/member/edit/${id}`)}
+              colorPalette={"blue"}
+              variant={"outline"}
+            >
+              수정
+            </Button>
             <DialogRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
               <DialogTrigger asChild>
-                <Button colorPalette={"red"}>탈퇴</Button>
+                <Button colorPalette={"red"} variant={"outline"}>
+                  탈퇴
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -113,7 +122,7 @@ export function MemberInfo() {
                 </DialogFooter>
               </DialogContent>
             </DialogRoot>
-          </Box>
+          </HStack>
         )}
       </Stack>
     </Box>
