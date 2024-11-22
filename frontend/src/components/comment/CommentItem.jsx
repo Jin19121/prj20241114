@@ -93,15 +93,22 @@ export function CommentItem({ comment, onDeleteClick, onEditClick }) {
 
   return (
     <Card.Root>
-      <Card.Header>
+      <Card.Header my={"10px"}>
         <Flex justify={"space-between"}>
           <Heading>{comment.memberId}</Heading>
-          <Heading>{comment.inserted}</Heading>
+          <Box
+            css={{
+              whiteSpace: "pre-wrap",
+              overflow: "auto",
+            }}
+          >
+            {comment.comment}
+          </Box>
+          <p>{comment.inserted}</p>
         </Flex>
-        <Box css={{ whiteSpace: "pre" }}>{comment.comment}</Box>
       </Card.Header>
       {hasAccess(comment.memberId) && (
-        <Card.Footer>
+        <Card.Footer justifyContent="flex-end" spacing={4}>
           <HStack>
             <EditButton comment={comment} onEditClick={onEditClick} />
             <DeleteButton onClick={() => onDeleteClick(comment.id)} />
