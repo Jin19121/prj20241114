@@ -47,7 +47,10 @@ export function BoardEdit() {
   const [progress, setProgress] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [removeFiles, setRemoveFiles] = useState([]);
+  const [uploadFiles, setUploadFiles] = useState([]);
+
   const { hasAccess } = useContext(AuthenticationContext);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -62,6 +65,7 @@ export function BoardEdit() {
       setRemoveFiles(removeFiles.filter((f) => f !== fileName));
     }
   };
+
   console.log("지울파일목록", removeFiles);
 
   const handleSaveClick = () => {
@@ -73,6 +77,7 @@ export function BoardEdit() {
         title: board.title,
         content: board.content,
         removeFiles,
+        uploadFiles,
       })
       .then((res) => res.data)
       .then((data) => {
@@ -100,7 +105,7 @@ export function BoardEdit() {
     return <Spinner />;
   }
 
-  //제목이나 본문이 비어있는지 확인
+  // 제목이나 본문이 비어있는 지 확인
   const disabled = !(
     board.title.trim().length > 0 && board.content.trim().length > 0
   );
@@ -125,6 +130,24 @@ export function BoardEdit() {
           files={board.fileList}
           onRemoveSwitchClick={handleRemoveSwitchClick}
         />
+        <Box>
+          <Box>
+            <input
+              onChange={(e) => setUploadFiles(e.target.files)}
+              type={"file"}
+              multiple
+              accept={"image/*"}
+            />
+          </Box>
+          <Box>
+            {Array.from(uploadFiles).map((file) => (
+              <li key={file.name}>
+                {file.name} ({Math.floor(file.size / 1024)} kb)
+              </li>
+            ))}
+          </Box>
+        </Box>
+
         {hasAccess(board.writer) && (
           <Box>
             <DialogRoot
