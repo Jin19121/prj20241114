@@ -1,4 +1,12 @@
-import { Badge, Box, Center, Heading, HStack, Table } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Center,
+  Heading,
+  HStack,
+  Input,
+  Table,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -11,12 +19,15 @@ import {
 import { FaCommentDots, FaImages } from "react-icons/fa6";
 import { GoHash, GoHeartFill, GoPersonFill } from "react-icons/go";
 import { IoCalendar } from "react-icons/io5";
+import { CiSearch } from "react-icons/ci";
+import { Button } from "../../components/ui/button.jsx";
 
 export function BoardList() {
   const [boardList, setBoardList] = useState([]);
   const [count, setCount] = useState(0);
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState({ type: "all", keyword: "" });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -54,66 +65,107 @@ export function BoardList() {
     setSearchParams(nextSearchParams);
   }
 
-  return (
-    <Center>
-      <Box>
-        <Heading size={{ base: "xl", md: "2xl" }} mb={7}>
-          게시물 목록
-        </Heading>
+  function handleSearchClick() {
+    if (search.keyword.trim().length > 0) {
+      //검색
+      const nextSearchParam = new URLSearchParams(searchParams);
+      nextSearchParam.set("st", search.type);
+      nextSearchParam.set("sk", search.keyword);
+      nextSearchParam.set("page", 1);
 
-        {boardList.length > 0 ? (
-          <Table.Root interactive>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader>
-                  <GoHash />
-                </Table.ColumnHeader>
-                <Table.ColumnHeader>제목</Table.ColumnHeader>
-                <Table.ColumnHeader>
-                  <GoHeartFill />
-                </Table.ColumnHeader>
-                <Table.ColumnHeader>
-                  <GoPersonFill />
-                </Table.ColumnHeader>
-                <Table.ColumnHeader hideBelow={"md"}>
-                  <IoCalendar />
-                </Table.ColumnHeader>
+      setSearchParams(nextSearchParam);
+    } else {
+      const nextSearchParam = new URLSearchParams(searchParams);
+      nextSearchParam.delete("st");
+      nextSearchParam.delete("sk");
+
+      setSearchParams(nextSearchParam);
+    }
+  }
+
+  return (
+    <Box>
+      <Heading size={{ base: "xl", md: "2xl" }} mb={7}>
+        게시물 목록
+      </Heading>
+
+      {boardList.length > 0 ? (
+        <Table.Root interactive>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader>
+                <GoHash />
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>제목</Table.ColumnHeader>
+              <Table.ColumnHeader>
+                <GoHeartFill />
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                <GoPersonFill />
+              </Table.ColumnHeader>
+              <Table.ColumnHeader hideBelow={"md"}>
+                <IoCalendar />
+              </Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {boardList.map((board) => (
+              <Table.Row
+                onClick={() => handleRowClick(board.id)}
+                key={board.id}
+              >
+                <Table.Cell>{board.id}</Table.Cell>
+                <Table.Cell>
+                  {board.title}
+                  {board.countComment > 0 && (
+                    <Badge variant={"subtle"} colorPalette={"green"}>
+                      <FaCommentDots />
+                      {board.countComment}
+                    </Badge>
+                  )}
+                  {board.countFile > 0 && (
+                    <Badge variant={"subtle"} colorPalette={"gray"}>
+                      <FaImages />
+                      {board.countFile}
+                    </Badge>
+                  )}
+                </Table.Cell>
+                <Table.Cell>
+                  {board.countLike > 0 ? board.countLike : ""}
+                </Table.Cell>
+                <Table.Cell>{board.writer}</Table.Cell>
+                <Table.Cell hideBelow={"md"}>{board.inserted}</Table.Cell>
               </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {boardList.map((board) => (
-                <Table.Row
-                  onClick={() => handleRowClick(board.id)}
-                  key={board.id}
-                >
-                  <Table.Cell>{board.id}</Table.Cell>
-                  <Table.Cell>
-                    {board.title}
-                    {board.countComment > 0 && (
-                      <Badge variant={"subtle"} colorPalette={"green"}>
-                        <FaCommentDots />
-                        {board.countComment}
-                      </Badge>
-                    )}
-                    {board.countFile > 0 && (
-                      <Badge variant={"subtle"} colorPalette={"gray"}>
-                        <FaImages />
-                        {board.countFile}
-                      </Badge>
-                    )}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {board.countLike > 0 ? board.countLike : ""}
-                  </Table.Cell>
-                  <Table.Cell>{board.writer}</Table.Cell>
-                  <Table.Cell hideBelow={"md"}>{board.inserted}</Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-        ) : (
-          <p>조회된 결과가 없습니다.</p>
-        )}
+            ))}
+          </Table.Body>
+        </Table.Root>
+      ) : (
+        <p>조회된 결과가 없습니다.</p>
+      )}
+      <Center>
+        <HStack my={7} w={{ sm: "400px" }}>
+          <Box>
+            <select
+              value={search.type}
+              onChange={(e) => setSearch({ ...search, type: e.target.value })}
+            >
+              <option value="all">전체</option>
+              <option value="title">제목</option>
+              <option value="content">본문</option>
+            </select>
+          </Box>
+          <Input
+            value={search.keyword}
+            onChange={(e) =>
+              setSearch({ ...search, keyword: e.target.value.trim() })
+            }
+          />
+          <Button onClick={handleSearchClick}>
+            <CiSearch />
+          </Button>
+        </HStack>
+      </Center>
+      <Center>
         <PaginationRoot
           onPageChange={handlePageChange}
           count={count}
@@ -126,7 +178,7 @@ export function BoardList() {
             <PaginationNextTrigger />
           </HStack>
         </PaginationRoot>
-      </Box>
-    </Center>
+      </Center>
+    </Box>
   );
 }
