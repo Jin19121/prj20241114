@@ -1,6 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
-import { Box, Input, Stack, Textarea } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  HStack,
+  Input,
+  Stack,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
 import { Field } from "../../components/ui/field.jsx";
 import { Button } from "../../components/ui/button.jsx";
 import { useNavigate } from "react-router-dom";
@@ -55,15 +63,26 @@ export function BoardAdd() {
   const filesList = [];
   let sumOfFileSize = 0;
   let invalidOneFileSize = false; // 한 파일이라도 1MB을 넘는지?
+
   for (const file of files) {
     sumOfFileSize += file.size;
     if (file.size > 1024 * 1024) {
       invalidOneFileSize = true;
     }
     filesList.push(
-      <li style={{ color: file.size > 1024 * 1024 ? "red" : "black" }}>
-        {file.name} ({Math.floor(file.size / 1024)} kb)
-      </li>,
+      <Card.Root size={"md"}>
+        <Card.Body>
+          <HStack>
+            <Text
+              css={{ color: file.size > 1024 * 1024 ? "red" : "black" }}
+              fontWeight={"bold"}
+              me={"auto"}
+            >
+              {file.name}
+            </Text>
+          </HStack>
+        </Card.Body>
+      </Card.Root>,
     );
   }
 
