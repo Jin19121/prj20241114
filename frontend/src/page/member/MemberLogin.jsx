@@ -46,9 +46,11 @@ export function MemberLogin() {
       <MyHeading>로그인</MyHeading>
       <Stack gap={5}>
         <Field labe={"아이디"}>
+          ID
           <Input value={id} onChange={(e) => setId(e.target.value)} />
         </Field>
         <Field labe={"비밀번호"}>
+          Password
           <Input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
