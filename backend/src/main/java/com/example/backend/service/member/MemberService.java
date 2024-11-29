@@ -65,6 +65,7 @@ public class MemberService {
         }
 
         //좋아요 지우기
+        
         boardMapper.deleteLikeByMemberId(member.getId());
 
         cnt = mapper.deleteById(member.getId());

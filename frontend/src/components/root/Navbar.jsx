@@ -83,7 +83,6 @@ export function Navbar() {
         </NavbarItem>
       )}
       <NavbarItem onClick={() => navigate(`/member/${id}`)}>
-        {" "}
         <Icon hideFrom={"md"}>
           <CiUser />
         </Icon>

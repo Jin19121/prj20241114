@@ -50,7 +50,6 @@ export function MemberEdit() {
       })
       .then((res) => {
         const message = res.data.message;
-
         toaster.create({
           type: message.type,
           description: message.text,
@@ -59,7 +58,6 @@ export function MemberEdit() {
       })
       .catch((e) => {
         const message = e.response.data.message;
-
         toaster.create({
           type: message.type,
           description: message.text,
